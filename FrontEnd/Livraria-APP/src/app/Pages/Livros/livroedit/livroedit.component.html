@@ -1,0 +1,83 @@
+<div class="container" style="margin-top: 20px;">
+
+    <div class="row justify-content-lg-center">
+      <div class="col col-lg-1">
+        <button id="voltar" class="btn btn-light" routerLink="/livros-list" type="button">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+      </div>
+      <div class="col col-lg-7 text-center">
+        <p class="display-4 translate-middle-x">Editar Livro</p>
+      </div>
+    </div>
+
+    <div class="row justify-content-lg-center">
+      <div class="col col-lg-8">
+        <hr />
+      </div>
+    </div>
+
+    <form method="post">
+
+    <div class="row justify-content-lg-center">
+
+        <div class="col col-lg-8">
+            <div class="form-group">
+                <label class="control-label">ID</label>
+                <input class="form-control" type="text" style="width: 60px;"
+                placeholder="{{ID}}" readonly>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-10 col-lg-6">
+          <div class="text-danger"></div>
+          <div class="form-group">
+            <label class="control-label">Título</label>
+            <input id="txtTitulo" class="form-control" value="{{GetLivro()?.titulo}}" />
+            <span class="text-danger">Digite o "Título do Livro"</span>
+          </div>
+        </div>
+
+        <div class="col-md-2 col-lg-2">
+          <div class="form-group">
+            <label class="control-label">Valor</label>
+            <input id="txtValor" class="form-control" value="{{GetLivro()?.valor}}"/>
+            <span class="text-danger">Digite o "Valor" do livro</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+          <div class="form-group">
+            <label class="control-label">Autor</label>
+            <input id="cmbAutor" class="form-control" value="{{GetAutor(GetLivro()?.autorID)?.nome}}" />
+            <span class="text-danger">Escolha o "Autor"</span>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="form-group">
+            <label class="control-label">Fornecedor</label>
+            <input id="cmbFornecedor" class="form-control" value="{{GetFornecedor(GetLivro()?.fornecedorID)?.nome}}" />
+            <span class="text-danger">Escolha o "Fornecedor"</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-lg-center">
+        <div class="col-12 col-md-8">
+          <div class="form-group">
+            <br />
+            <input (click)="Salvar()" type="button" value="Salvar" class="btn btn-primary" />
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>

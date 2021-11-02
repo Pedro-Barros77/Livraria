@@ -4,15 +4,23 @@ import {HttpClientModule} from '@angular/common/http'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LivrosComponent } from './Components/livros/livros.component';
 import { FormsModule } from '@angular/forms';
-import { ListComponent } from './Pages/Livros/list/list.component';
+import { LivroListComponent } from './Pages/Livros/livrolist/livrolist.component';
+import { LivroEditComponent } from './Pages/Livros/livroedit/livroedit.component';
+import { LivroCreateComponent } from './Pages/Livros/livrocreate/livrocreate.component';
+import { LivroDetailsComponent } from './Pages/Livros/livrodetails/livrodetails.component';
+import { LivroDeleteComponent } from './Pages/Livros/livrodelete/livrodelete.component';
+import { NavBarComponent } from './Components/nav-bar/nav-bar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LivrosComponent,
-    ListComponent
+    LivroListComponent,
+    LivroEditComponent,
+    LivroCreateComponent,
+    LivroDetailsComponent,
+    LivroDeleteComponent,
+    NavBarComponent
   ],
   imports: [
     BrowserModule,

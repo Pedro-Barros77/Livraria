@@ -26,10 +26,23 @@ namespace Livraria_API.Controllers
             return _context.Livros;
         }
 
-        [HttpPut]
-        public Livro GetByID(int id)
+        [HttpPut("{id}")]
+        public IActionResult GetByID(int id,[FromBody]Livro liv)
         {
-            return _context.Livros.FirstOrDefault(Liv => Liv.ID == id);
+            var result = _context.Livros.FirstOrDefault(item => item.ID == id);
+            if(result == default)
+            {
+                return NotFound();
+            }
+            else
+            {
+                result.Titulo = liv.Titulo;
+                result.Valor = float.Parse(liv.Valor.ToString());
+                result.AutorID = int.Parse(liv.AutorID.ToString());
+                result.FornecedorID = int.Parse(liv.FornecedorID.ToString());
+                _context.SaveChanges();
+                return Ok("{\"resultado\": \"Alterado com sucesso: "+id+"\"}");
+            }
         }
 
         [HttpPost]

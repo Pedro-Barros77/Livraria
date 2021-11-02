@@ -1,0 +1,37 @@
+#dpdFiltro{
+  width: 100%;
+}
+
+.dropdown-menu{
+  min-width: 100%;
+}
+
+#btnOrdem{
+  width: 80%;
+}
+
+#dpdOrdem{
+  width: 20%;
+  margin-right: 13px;
+}
+
+
+.btnWhite{
+  background-color: white;
+  border: 1px solid gray;
+}
+.btnWhite:hover{
+  background-color: rgb(238, 238, 238);
+  border: 1px solid black;
+}
+
+.col{
+  padding-right: 0;
+}
+
+.btnAction{
+  width: auto;
+  height: 100%;
+  margin:0 5px 0 0;
+  padding: 1px 4px;
+}
