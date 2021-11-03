@@ -20,7 +20,7 @@
 
       <div class="col col-sm-12 col-md-7 col-lg-4">
         <div class="form-group mb-2">
-          <input type="text" class="form-control mr-2" placeholder="{{FilterType}}" [(ngModel)]="SearchFilter">
+          <input type="text" class="form-control mr-2" placeholder="{{service.FilterType}}" [(ngModel)]="service.SearchFilter">
         </div>
       </div>
 
@@ -28,19 +28,19 @@
         <div class="dropdown">
           <button class="btn btn-light dropdown-toggle btnWhite" type="button" id="dpdFiltro" data-bs-toggle="dropdown"
             aria-expanded="false">
-            <i class="fas fa-filter"></i> {{FilterType}}
+            <i class="fas fa-filter"></i> {{service.FilterType}}
           </button>
           <ul class="dropdown-menu" aria-labelledby="dpdFiltro">
-            <li><a class="dropdown-item" (click)="FilterType = 'Titulo'">Titulo</a></li>
-            <li><a class="dropdown-item" (click)="FilterType = 'Autor'">Autor</a></li>
-            <li><a class="dropdown-item" (click)="FilterType = 'Fornecedor'">Fornecedor</a></li>
+            <li><a class="dropdown-item" (click)="service.FilterType = 'Titulo'">Titulo</a></li>
+            <li><a class="dropdown-item" (click)="service.FilterType = 'Autor'">Autor</a></li>
+            <li><a class="dropdown-item" (click)="service.FilterType = 'Fornecedor'">Fornecedor</a></li>
           </ul>
         </div>
       </div>
 
       <div class="col col-sm-4 col-md-3 col-lg-2">
         <div class="btn-group" style="width: 100%;">
-          <button (click)="ReOrder()" id="btnOrdem" type="button" class="btn btn-light btnWhite">
+          <button (click)="service.ReOrder()" id="btnOrdem" type="button" class="btn btn-light btnWhite">
             <i id="ordemIcon" class="fas fa-sort-alpha-down"></i>
             Ordenar
           </button>
@@ -49,8 +49,8 @@
             <span class="visually-hidden">Toggle Dropdown</span>
           </button>
           <ul class="dropdown-menu" aria-labelledby="dpdOrdem">
-            <li><a class="dropdown-item" (click)="setOrdem(true)">Alfabética</a></li>
-            <li><a class="dropdown-item" (click)="setOrdem(false)">Crescente/Decrescente</a></li>
+            <li><a class="dropdown-item" (click)="service.setOrdem(true)">Alfabética</a></li>
+            <li><a class="dropdown-item" (click)="service.setOrdem(false)">Crescente/Decrescente</a></li>
           </ul>
         </div>
       </div>
@@ -70,9 +70,8 @@
       </tr>
     </thead>
 
-
-    <tbody *ngIf="Livros && Livros.length" class="table-light">
-      <tr *ngFor="let livro of LivrosFiltrados; index as i">
+    <tbody *ngIf="service.livrosList && service.livrosList.length" class="table-light">
+      <tr *ngFor="let livro of service.filteredLivros; index as i">
         <td>
           <button type="button" class="btn btn-outline-secondary btnAction" [routerLink]="['/livros-edit',livro.id]">
             <i class="fas fa-pen"></i>
@@ -83,26 +82,24 @@
           <button type="button" class="btn btn-outline-danger btnAction" [routerLink]="['/livros-delete',livro.id]">
             <i class="fas fa-trash-alt"></i>
           </button>
-
-
         </td>
         <td>img</td>
         <td>{{livro.titulo}}</td>
         <td>{{livro.valor}}</td>
-        <td>{{GetAutor(livro.autorID)?.nome}}</td>
-        <td>{{GetFornecedor(livro.fornecedorID)?.nome}}</td>
+        <td>{{service.getAutor(livro.id)?.nome}}</td>
+        <td>{{service.getFornecedor(livro.id)?.nome}}</td>
       </tr>
     </tbody>
 
     <tfoot class="table-light">
-      <tr *ngIf="!Livros.length">
+      <tr *ngIf="!service.livrosList.length">
         <td colspan="8">
           <h6>Nenhum livro cadastrado.</h6>
         </td>
       </tr>
-      <tr *ngIf="!LivrosFiltrados.length">
+      <tr *ngIf="!service.filteredLivros.length">
         <td colspan="8">
-          Nenhum livro com o <strong>{{FilterType}}</strong> informado.
+          Nenhum livro com o <strong>{{service.FilterType}}</strong> informado.
         </td>
       </tr>
     </tfoot>

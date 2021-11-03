@@ -1,39 +1,92 @@
-<h1>Delete</h1>
+<div class="container" style="margin-top: 20px;">
 
-<h3>Tem certeza que deseja deletar o registro?</h3>
-<div>
-    <h4>Livro</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Livro.Titulo)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Livro.Titulo)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Livro.Valor)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Livro.Valor)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Livro.Autor)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Livro.Autor)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Livro.Fornecedor)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Livro.Fornecedor)
-        </dd>
-    </dl>
+  <div class="row justify-content-lg-center">
+    <div class="col col-lg-1">
+      <button id="voltar" class="btn btn-light" routerLink="/livros-list" type="button">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+    </div>
+    <div class="col col-lg-7 text-center">
+      <p class="display-4 translate-middle-x">Excluir</p>
+    </div>
+  </div>
 
-    <form method="post">
-        <input type="hidden" asp-for="Livro.ID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a routerLink="/livros-list">Voltar a lista</a>
-    </form>
+  <div class="row justify-content-lg-center text-center">
+    <div class="col col-lg-8">
+      <p class="display-6">Tem certeza que deseja excluir este livro?</p>
+    </div>
+  </div>
+
+  <div class="row justify-content-lg-center">
+    <div class="col col-lg-8">
+      <hr />
+    </div>
+  </div>
+
+
+  <div class="row justify-content-center">
+
+    <div class="col-md-12 col-lg-8">
+      <div class="row">
+
+        <div class="col-12 col-md-6">
+          <div class="row">
+            <div class="col-auto">
+              <h5>Título:</h5>
+            </div>
+            <div class="col-auto">
+              {{GetLivro()?.titulo}}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <div class="row">
+            <div class="col-auto">
+              <h5>Valor:</h5>
+            </div>
+            <div class="col-auto">
+              {{GetLivro()?.valor}}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <div class="row">
+            <div class="col-auto">
+              <h5>Autor:</h5>
+            </div>
+            <div class="col-auto">
+              {{GetAutor(GetLivro()?.autorID)?.nome}}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <div class="row">
+            <div class="col-auto">
+              <h5>Fornecedor:</h5>
+            </div>
+            <div class="col-auto">
+              {{GetFornecedor(GetLivro()?.fornecedorID)?.nome}}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row justify-content-center">
+
+  </div>
+
+  <div class="row justify-content-lg-center">
+    <div class="col-12 col-md-8">
+      <button class="btn btn-danger" (click)='Excluir()'>Sim, Excluir</button>
+      <button class="btn btn-secondary" [routerLink]="['/livro-detail', ID]">Detalhes</button>
+    </div>
+  </div>
+
 </div>

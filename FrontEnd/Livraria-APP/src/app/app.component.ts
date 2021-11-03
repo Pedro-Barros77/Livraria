@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { LivroServiceService } from './Shared/livro-service.service';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +9,8 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'Livraria-APP';
-  constructor(router: Router){router.navigate(["/livros-list"])}
+  constructor(router: Router, public service: LivroServiceService)
+  {
+    router.navigate(["/livros-list"])
+  }
 }

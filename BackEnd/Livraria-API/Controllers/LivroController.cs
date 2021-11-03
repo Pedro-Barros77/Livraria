@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Livraria_API.Data;
 using Livraria_API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Livraria_API.Controllers
@@ -20,35 +21,87 @@ namespace Livraria_API.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public IEnumerable<Livro> Get()
+        private bool LivroExists(int id)
         {
-            return _context.Livros;
+            return _context.Livros.Any(liv => liv.ID == id);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult GetByID(int id,[FromBody]Livro liv)
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Livro>>> GetLivros()
         {
-            var result = _context.Livros.FirstOrDefault(item => item.ID == id);
-            if(result == default)
+            return await _context.Livros.ToListAsync();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Livro>> GetLivro(int id)
+        {
+            var livro = await _context.Livros.FindAsync(id);
+
+            if (livro == null)
             {
                 return NotFound();
             }
-            else
-            {
-                result.Titulo = liv.Titulo;
-                result.Valor = float.Parse(liv.Valor.ToString());
-                result.AutorID = int.Parse(liv.AutorID.ToString());
-                result.FornecedorID = int.Parse(liv.FornecedorID.ToString());
-                _context.SaveChanges();
-                return Ok("{\"resultado\": \"Alterado com sucesso: "+id+"\"}");
-            }
+
+            return livro;
         }
 
-        [HttpPost]
-        public String Post()
+
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutLivro(int id, Livro livro)
         {
-            return "Exemplo de Post";
+            if (id != livro.ID)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(livro).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!LivroExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
+
+
+        [HttpPost]
+        public async Task<ActionResult<Livro>> PostLivro(Livro livro)
+        {
+            _context.Livros.Add(livro);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetLivro", new { id = livro.ID }, livro);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteLivro(int id)
+        {
+            var livro = await _context.Livros.FindAsync(id);
+            if (livro == null)
+            {
+                return NotFound();
+            }
+
+            _context.Livros.Remove(livro);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+
     }
 }

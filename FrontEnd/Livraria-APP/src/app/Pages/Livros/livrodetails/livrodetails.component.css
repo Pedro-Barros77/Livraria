@@ -1,0 +1,27 @@
+.btnBlackHover{
+  margin-top:18px;
+  background-color: rgb(95, 95, 95);
+}
+.btnBlackHover i{
+  color: white;
+}
+
+.btnBlackHover:hover{
+  transition: 500ms;
+  background-color: black;
+  cursor: pointer;
+}
+
+.display-4{
+  position: absolute;
+  left: 50%;
+}
+
+hr{
+  position: relative;
+  width: 100%;
+}
+
+.display-6{
+  margin-top: 20px;
+}

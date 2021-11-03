@@ -1,7 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Livro } from 'src/app/Shared/livro.model';
+import { LivroServiceService } from './../../../Shared/livro-service.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-edit',
@@ -10,107 +11,38 @@ import { Observable } from 'rxjs';
 })
 export class LivroEditComponent implements OnInit {
 
-  constructor(private http: HttpClient, private _Activatedroute: ActivatedRoute) { }
-
-  ngOnInit(): void {
-    this.getLivros();
+  constructor(
+    private _Activatedroute: ActivatedRoute,
+    public service: LivroServiceService) {
   }
 
-  httpHeader = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
+  ngOnInit(): void {
+    this.service.refreshList();
   }
 
   public idString = this._Activatedroute.snapshot.paramMap.get("id");
   public ID: number = parseInt(this.idString!);
 
-  public Livros: any = [];
+  onSubmit(form: NgForm) {
+      this.updateRecord(form);
+  }
 
-  public Autores: any = [];
-  public Fornecedores: any = [];
+  populateForm(selectedRecord: Livro) {
+    this.service.formData = Object.assign({}, selectedRecord);
+  }
 
-  public getLivros(): void {
-    this.http.get('https://localhost:5000/api/Livro').subscribe(
-      response => {
-        this.Livros = response;
+  updateRecord(form: NgForm) {
+    this.service.putLivro().subscribe(
+      res => {
+        this.resetForm(form);
+        this.service.refreshList();
       },
-      error => console.log(error))
-
-
-    this.http.get('https://localhost:5000/api/Autor').subscribe(
-      response => {
-        this.Autores = response;
-      },
-      error => console.log(error))
-
-
-    this.http.get('https://localhost:5000/api/Fornecedor').subscribe(
-      response => {
-        this.Fornecedores = response;
-      },
-      error => console.log(error))
-  }
-
-  public GetLivro(): any {
-    return this.Livros.find((liv: { id: number }) => liv.id == this.ID);
-  }
-
-  public GetAutor(livroId: number): any {
-    return this.Autores.find((aut: { id: number }) => aut.id == livroId);
-  }
-  public GetFornecedor(livroId: number): any {
-    return this.Fornecedores.find((forn: { id: number }) => forn.id == livroId);
-  }
-
-  public Salvar() {
-    let titulo = document.querySelector("#txtTitulo")?.nodeValue;
-    let valor = document.querySelector("#txtValor")?.nodeValue;
-    let autorID = document.querySelector("#cmbAutor")?.nodeValue;
-    let fornecedorID = document.querySelector("#cmbFornecedor")?.nodeValue;
-    let liv = new Livro(this.ID.toString(), "Teste", "valor", "1", "1")
-    this.putLivro(liv);
-  }
-
-  public putLivro(liv: Livro): void {
-    let resultado: any;
-
-    const data = "{\"ID\": \""+liv.ID+"\",\"Titulo\": \""+liv.Titulo+"\",\"Valor\": \""+liv.Valor+"\",\"AutorID\": \""+liv.AutorID+"\",\"FornecedorID\": \""+liv.FornecedorID+"\"}";
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    }
-
-    this.http.put<Livro>('https://localhost:5000/api/Livro/'+liv.ID, liv, httpOptions)
-      .subscribe(
-      (res) => console.log(res),
-      (err) => console.log(err)
+      err => { console.log(err); }
     );
-
-    // this.http.put("https://localhost:5000/api/Livro/"+liv.ID, data, httpOptions)
-    // .subscribe(
-    //   // data => this.postId = data.id,
-    //   // response => {
-    //   //   resultado = response.body;
-    //   //   console.log(resultado);
-    //   // },
-    //   error => console.log(error));
   }
-}
 
-class Livro {
-  ID: string;
-  Titulo: string;
-  Valor: string;
-  AutorID: string;
-  FornecedorID: string;
-
-  constructor(Id: string, Titulo: string, Valor: string, AutorId: string, FornecedorId: string) {
-    this.ID = Id;
-    this.Titulo = Titulo;
-    this.Valor = Valor;
-    this.AutorID = AutorId;
-    this.FornecedorID = FornecedorId;
+  resetForm(form: NgForm) {
+    form.form.reset();
+    this.service.formData = new Livro();
   }
 }
