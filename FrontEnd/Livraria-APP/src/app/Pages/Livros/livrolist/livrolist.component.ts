@@ -10,8 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LivroListComponent implements OnInit {
 
-  constructor(private http: HttpClient,
-    public service: LivroServiceService) {}
+  constructor(public service: LivroServiceService) { }
 
   ngOnInit(): void {
     this.service.refreshList();
@@ -19,7 +18,54 @@ export class LivroListComponent implements OnInit {
     this.service.refreshFornecedores();
   }
 
-  // populateForm(selectedRecord: Livro) {
-  //   this.service.formData = Object.assign({}, selectedRecord);
-  // }
+  populateForm(selectedRecord: Livro) {
+    this.service.formData = Object.assign({}, selectedRecord);
+  }
+
+  deleteLiv() {
+    let body = document.querySelector("#modalBody");
+    let id = body?.getAttribute("name");
+    this.service.deleteLivro(parseInt(id!)).subscribe();
+
+    // document.querySelector("#tabelaLiv")!
+    this.service.refreshList();
+
+    body!.innerHTML = '';
+  }
+
+  buildModal(livro: Livro) {
+    let body = document.querySelector("#modalBody");
+    body?.setAttribute("name", livro.id.toString());
+
+    body!.innerHTML = '';
+
+    let pTitulo = document.createElement("p");
+    pTitulo.innerText = "Titulo: " + livro.titulo;
+
+    let pValor = document.createElement("p");
+    pValor.innerText = "Valor: " + livro.valor;
+
+    let pAutor = document.createElement("p");
+    if (livro.autorID != null) {
+      pAutor.innerText = "Autor: " + this.service.getAutor(livro.id).nome;
+    }
+    else{
+      pAutor.innerText = "Autor: Nenhum Selecionado";
+    }
+
+    let pFornecedor = document.createElement("p");
+    if (livro.fornecedorID != null) {
+      pFornecedor.innerText = "Fornecedor: " + this.service.getFornecedor(livro.id).nome;
+    }
+    else{
+      pAutor.innerText = "Fornecedor: Nenhum Selecionado";
+    }
+
+
+    body?.appendChild(pTitulo);
+    body?.appendChild(pValor);
+    body?.appendChild(pAutor);
+    body?.appendChild(pFornecedor);
+
+  }
 }

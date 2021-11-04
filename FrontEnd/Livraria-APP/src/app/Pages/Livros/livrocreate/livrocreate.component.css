@@ -21,3 +21,7 @@ hr{
   position: relative;
   width: 100%;
 }
+
+.invalid-feedback{
+  font-size: smaller;
+}

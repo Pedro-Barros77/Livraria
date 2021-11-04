@@ -20,7 +20,8 @@
 
       <div class="col col-sm-12 col-md-7 col-lg-4">
         <div class="form-group mb-2">
-          <input type="text" class="form-control mr-2" placeholder="{{service.FilterType}}" [(ngModel)]="service.SearchFilter">
+          <input type="text" class="form-control mr-2" placeholder="{{service.FilterType}}"
+            [(ngModel)]="service.SearchFilter">
         </div>
       </div>
 
@@ -58,7 +59,7 @@
     </div>
   </div>
 
-  <table class="table table-striped table-hover">
+  <table id="tabela" class="table table-striped table-hover">
     <thead class="table-dark">
       <tr>
         <th>#</th>
@@ -71,23 +72,28 @@
     </thead>
 
     <tbody *ngIf="service.livrosList && service.livrosList.length" class="table-light">
+
       <tr *ngFor="let livro of service.filteredLivros; index as i">
-        <td>
-          <button type="button" class="btn btn-outline-secondary btnAction" [routerLink]="['/livros-edit',livro.id]">
-            <i class="fas fa-pen"></i>
-          </button>
-          <button type="button" class="btn btn-outline-primary btnAction" [routerLink]="['/livros-detail',livro.id]">
-            <i class="fas fa-search"></i>
-          </button>
-          <button type="button" class="btn btn-outline-danger btnAction" [routerLink]="['/livros-delete',livro.id]">
-            <i class="fas fa-trash-alt"></i>
-          </button>
-        </td>
-        <td>img</td>
-        <td>{{livro.titulo}}</td>
-        <td>{{livro.valor}}</td>
-        <td>{{service.getAutor(livro.id)?.nome}}</td>
-        <td>{{service.getFornecedor(livro.id)?.nome}}</td>
+          <td>
+            <button type="button" class="btn btn-outline-secondary btnAction" [routerLink]="['/livros-edit']"
+              (click)="populateForm(livro)">
+              <i class="fas fa-pen"></i>
+            </button>
+            <button type="button" class="btn btn-outline-primary btnAction" [routerLink]="['/livros-detail']"
+            (click)="populateForm(livro)">
+              <i class="fas fa-search"></i>
+            </button>
+
+            <button (click)="buildModal(livro)" data-bs-toggle="modal" data-bs-target="#deleteModal" type="button"
+              class="btn btn-outline-danger btnAction">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </td>
+          <td>img</td>
+          <td>{{livro.titulo}}</td>
+          <td>{{livro.valor}}</td>
+          <td>{{service.getAutor(livro.id)?.nome}}</td>
+          <td>{{service.getFornecedor(livro.id)?.nome}}</td>
       </tr>
     </tbody>
 
@@ -104,5 +110,24 @@
       </tr>
     </tfoot>
   </table>
+
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Tem certeza que deseja excluir o registro?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div id="modalBody" class="modal-body">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button (click)="deleteLiv()" id="confirmDelete" data-bs-dismiss="modal" type="button"
+            class="btn btn-danger">Sim, Excluir</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>

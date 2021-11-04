@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Livro } from './livro.model';
 import { Autor } from './autor.model';
 import { Fornecedor } from './fornecedor.model';
+import { CurrencyPipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ export class LivroServiceService {
   autoresList: Autor[] = [];
   fornecedoresList: Fornecedor[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private currencyPipe: CurrencyPipe) { }
 
   postLivro() {
     return this.http.post(this.baseURL, this.formData);
@@ -36,18 +37,19 @@ export class LivroServiceService {
   refreshList() {
     this.http.get(this.baseURL)
       .toPromise()
-      .then(res =>{
+      .then(res => {
         this.livrosList = res as Livro[];
         this.filteredLivros = res as Livro[];
         this.ReOrder();
         this.ReOrder();
+        console.log("refreshado")
       });
   }
 
   refreshAutores() {
     this.http.get(this.autorURL)
       .toPromise()
-      .then(res =>{
+      .then(res => {
         this.autoresList = res as Autor[];
       });
   }
@@ -55,27 +57,31 @@ export class LivroServiceService {
   refreshFornecedores() {
     this.http.get(this.fornecedorURL)
       .toPromise()
-      .then(res =>{
+      .then(res => {
         this.fornecedoresList = res as Fornecedor[];
       });
   }
 
 
 
-  getAutor(idLivro: number): any{
+  getAutor(idLivro: number): any {
     let livro = this.livrosList.find(liv => liv.id == idLivro);
     return this.autoresList.find(aut => aut.id == livro?.autorID)!;
   }
 
-  getFornecedor(idLivro: number): any{
+  getFornecedor(idLivro: number): any {
     let livro = this.livrosList.find(liv => liv.id == idLivro);
     return this.fornecedoresList.find(forn => forn.id == livro?.fornecedorID)!;
   }
 
 
+//toLocaleString("pt-br",{style: "currency",currency: "BRL"})
 
+  updateUSAmount(event:any) {
+    this.formData.valor = event.target.value;
+  }
 
- //Funções de filtro da lista \/ \/ \/
+  //Funções de filtro da lista \/ \/ \/
 
 
   public filteredLivros: Livro[] = this.livrosList;

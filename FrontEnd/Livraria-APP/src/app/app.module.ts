@@ -10,8 +10,8 @@ import { LivroListComponent } from './Pages/Livros/livrolist/livrolist.component
 import { LivroEditComponent } from './Pages/Livros/livroedit/livroedit.component';
 import { LivroCreateComponent } from './Pages/Livros/livrocreate/livrocreate.component';
 import { LivroDetailsComponent } from './Pages/Livros/livrodetails/livrodetails.component';
-import { LivroDeleteComponent } from './Pages/Livros/livrodelete/livrodelete.component';
 import { NavBarComponent } from './Components/nav-bar/nav-bar.component';
+import { CurrencyPipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -20,7 +20,6 @@ import { NavBarComponent } from './Components/nav-bar/nav-bar.component';
     LivroEditComponent,
     LivroCreateComponent,
     LivroDetailsComponent,
-    LivroDeleteComponent,
     NavBarComponent
   ],
   imports: [
@@ -30,7 +29,7 @@ import { NavBarComponent } from './Components/nav-bar/nav-bar.component';
     FormsModule,  
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [CurrencyPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

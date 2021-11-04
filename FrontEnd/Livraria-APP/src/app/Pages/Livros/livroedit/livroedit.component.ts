@@ -1,7 +1,7 @@
 import { Livro } from 'src/app/Shared/livro.model';
 import { LivroServiceService } from './../../../Shared/livro-service.service';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Directive, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -12,30 +12,23 @@ import { NgForm } from '@angular/forms';
 export class LivroEditComponent implements OnInit {
 
   constructor(
-    private _Activatedroute: ActivatedRoute,
-    public service: LivroServiceService) {
-  }
+    public service: LivroServiceService,
+    router: Router) { this.router = router}
+
+  router: Router;
 
   ngOnInit(): void {
-    this.service.refreshList();
   }
-
-  public idString = this._Activatedroute.snapshot.paramMap.get("id");
-  public ID: number = parseInt(this.idString!);
 
   onSubmit(form: NgForm) {
-      this.updateRecord(form);
-  }
-
-  populateForm(selectedRecord: Livro) {
-    this.service.formData = Object.assign({}, selectedRecord);
+    this.updateRecord(form);
   }
 
   updateRecord(form: NgForm) {
     this.service.putLivro().subscribe(
       res => {
         this.resetForm(form);
-        this.service.refreshList();
+        this.router.navigate(["/livros-list"])
       },
       err => { console.log(err); }
     );
@@ -44,5 +37,9 @@ export class LivroEditComponent implements OnInit {
   resetForm(form: NgForm) {
     form.form.reset();
     this.service.formData = new Livro();
+  }
+    
+  getValor(): number{
+    return parseFloat(this.service.formData.valor);
   }
 }

@@ -7,7 +7,7 @@
       </button>
     </div>
     <div class="col col-lg-7 text-center">
-      <p class="display-4 translate-middle-x">Criar Livro</p>
+      <p class="display-4 translate-middle-x">Novo Livro</p>
     </div>
   </div>
 
@@ -17,54 +17,83 @@
     </div>
   </div>
 
-  <form method="post" class="was-validated needs-validation" novalidation>
-    <div class="row justify-content-center">
-
-      <div class="col-md-10 col-lg-6">
-        <div class="text-danger"></div>
-        <div class="form-group">
-          <label class="form-label">Título</label>
-          <input class="form-control" required/>
-          <span class="invalid-feedback text-danger">Digite o "Título do Livro"</span>
-        </div>
-      </div>
-
-      <div class="col-md-2 col-lg-2">
-        <div class="form-group">
-          <label class="control-label">Valor</label>
-          <input class="form-control" required/>
-          <span class="invalid-feedback text-danger">Digite o "Valor" do livro</span>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="row justify-content-center">
-      <div class="col-md-6 col-lg-4">
-        <div class="form-group">
-          <label class="control-label">Autor</label>
-          <input class="form-control" required/>
-          <span class="invalid-feedback text-danger">Escolha o "Autor"</span>
-        </div>
-      </div>
-
-      <div class="col-md-6 col-lg-4">
-        <div class="form-group">
-          <label class="control-label">Fornecedor</label>
-          <input class="form-control" required/>
-          <span class="invalid-feedback text-danger">Escolha o "Fornecedor"</span>
-        </div>
-      </div>
-    </div>
+  <form class="was-validated" method="post" novalidate autocomplete="off" #form="ngForm" (submit)="onSubmit(form)">
 
     <div class="row justify-content-lg-center">
-      <div class="col-12 col-md-8">
-        <div class="form-group">
-          <br />
-          <input type="submit" value="Salvar" class="btn btn-primary" />
+
+      <div class="row justify-content-center">
+
+        <div class="col-md-10 col-lg-6">
+          <div class="text-danger"></div>
+
+          <div class="form-group">
+            <label class="control-label">Título</label>
+            <!-- Caixa de texto TITULO-->
+            <input class="form-control" placeholder="Titulo" name="titulo" id="txtTitulo" value="titulo"
+              #titulo="ngModel" [(ngModel)]="service.formData.titulo" required
+              [class.invalid]="titulo.invalid && titulo.touched" />
+
+            <span class="text-danger invalid-feedback">Campo Título obrigatório.</span>
+          </div>
+        </div>
+
+        <div class="col-md-2 col-lg-2">
+          <div class="form-group">
+            <label class="control-label">Valor</label>
+            <!-- Caixa de texto VALOR-->
+            <input class="form-control txtCurrency" placeholder="Valor" name="valor" id="txtValor" value="valor" #valor="ngModel"
+              [(ngModel)]="service.formData.valor" required [class.invalid]="valor.invalid && valor.touched"
+              [value]="service.formData.valor"
+              (blur)="service.updateUSAmount($event)"/>
+            <span class="text-danger invalid-feedback">Campo Valor obrigatório.</span>
+          </div>
+        </div>
+      </div>
+        
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+
+          <div class="form-group">
+            <label class="control-label">Autor</label>
+            <!-- ComboBox Autor -->
+            <select class="form-select" aria-label="Autor"
+            name="autorID" id="cmbAutor"
+            #autorID="ngModel" [(ngModel)]="service.formData.autorID"
+              [class.invalid]="autorID.invalid && autorID.touched">
+
+              <option value="0">Nenhum selecionado</option>
+              <option *ngFor="let autor of service.autoresList" value="{{autor.id}}">{{autor.nome}}</option>
+            </select>
+
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+
+          <div class="form-group">
+            <label class="control-label">Fornecedor</label>
+            <!-- Caixa de texto FORNECEDOR-->
+            <select class="form-select" aria-label="Fornecedor"
+            name="fornecedorID" id="cmbFornecedor"
+            #fornecedorID="ngModel" [(ngModel)]="service.formData.fornecedorID"
+              [class.invalid]="fornecedorID.invalid && fornecedorID.touched">
+
+              <option value="0">Nenhum selecionado</option>
+              <option *ngFor="let fornecedor of service.fornecedoresList" value="{{fornecedor.id}}">{{fornecedor.nome}}</option>
+            </select>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-lg-center">
+        <div class="col-12 col-md-8">
+          <div class="form-group">
+            <br />
+            <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Salvar</button>
+          </div>
         </div>
       </div>
     </div>
-
   </form>
 </div>

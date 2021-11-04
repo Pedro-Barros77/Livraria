@@ -56,6 +56,17 @@ namespace Livraria_API.Controllers
                 return BadRequest();
             }
 
+            if(livro.AutorID ==0)
+            {
+                livro.AutorID = null;
+                livro.Autor = null;
+            }
+            if(livro.FornecedorID ==0)
+            {
+                livro.FornecedorID = null;
+                livro.Fornecedor = null;
+            }
+
             _context.Entry(livro).State = EntityState.Modified;
 
             try
@@ -81,6 +92,18 @@ namespace Livraria_API.Controllers
         [HttpPost]
         public async Task<ActionResult<Livro>> PostLivro(Livro livro)
         {
+
+            if(livro.AutorID ==0)
+            {
+                livro.AutorID = null;
+                livro.Autor = null;
+            }
+            if(livro.FornecedorID ==0)
+            {
+                livro.FornecedorID = null;
+                livro.Fornecedor = null;
+            }
+
             _context.Livros.Add(livro);
             await _context.SaveChangesAsync();
 

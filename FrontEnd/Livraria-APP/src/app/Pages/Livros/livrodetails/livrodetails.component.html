@@ -30,7 +30,7 @@
               <h5>Título:</h5>
             </div>
             <div class="col-auto">
-              {{GetLivro()?.titulo}}
+              {{service.formData.titulo}}
             </div>
           </div>
         </div>
@@ -41,7 +41,7 @@
               <h5>Valor:</h5>
             </div>
             <div class="col-auto">
-              {{GetLivro()?.valor}}
+              {{service.formData.valor}}
             </div>
           </div>
         </div>
@@ -52,7 +52,7 @@
               <h5>Autor:</h5>
             </div>
             <div class="col-auto">
-              {{GetAutor(GetLivro()?.autorID)?.nome}}
+              {{service.getAutor(service.formData.id)?.nome}}
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@
               <h5>Fornecedor:</h5>
             </div>
             <div class="col-auto">
-              {{GetFornecedor(GetLivro()?.fornecedorID)?.nome}}
+              {{service.getFornecedor(service.formData.id)?.nome}}
             </div>
           </div>
         </div>
@@ -71,7 +71,7 @@
         <div class="col-12 col-md-6">
           <div class="row">
             <div class="col-4">
-              <button type="button" class="btn btn-secondary btnBlackHover" [routerLink]="['/livros-edit',ID]">
+              <button (click)="populateForm(service.formData)" type="button" class="btn btn-secondary btnBlackHover" [routerLink]="['/livros-edit']">
                 <i class="fas fa-pen"></i> Editar
               </button>
             </div>
@@ -82,9 +82,5 @@
     </div>
 
   </div>
-
-  <!--olha lá agora, ta igual o voltar..................-->
-  <!-- gostei mano!!!, talvez (besteira), colocar uma corzinha pra dar uma diferenciada do fundo,
-assim como o de voltar está... galera nem começou o projeto deles ainda DEITABEISI -->
 
 </div>

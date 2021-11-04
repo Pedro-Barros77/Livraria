@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <form method="post" novalidate autocomplete="off" #form="ngForm" (submit)="onSubmit(form)">
+  <form class="was-validated" method="post" novalidate autocomplete="off" #form="ngForm" (submit)="onSubmit(form)">
 
     <div class="row justify-content-lg-center">
 
@@ -38,7 +38,7 @@
               #titulo="ngModel" [(ngModel)]="service.formData.titulo" required
               [class.invalid]="titulo.invalid && titulo.touched" />
 
-            <span class="text-danger">Digite o "Título" do Livro</span>
+            <span class="text-danger invalid-feedback">Campo Título obrigatório.</span>
           </div>
         </div>
 
@@ -46,39 +46,47 @@
           <div class="form-group">
             <label class="control-label">Valor</label>
             <!-- Caixa de texto VALOR-->
-            <input class="form-control" placeholder="Valor" name="valor" id="txtValor" value="valor" #valor="ngModel"
-              [(ngModel)]="service.formData.valor" required [class.invalid]="valor.invalid && valor.touched" />
-
-            <span class="text-danger">Digite o "Valor" do Livro</span>
+            <input class="form-control txtCurrency" placeholder="Valor" name="valor" id="txtValor" value="valor" #valor="ngModel"
+              [(ngModel)]="service.formData.valor" required [class.invalid]="valor.invalid && valor.touched"
+              [value]="getValor() | currency:'BRL'"
+              (blur)="service.updateUSAmount($event)"/>
+            <span class="text-danger invalid-feedback">Campo Valor obrigatório.</span>
           </div>
         </div>
-
       </div>
-
+        
       <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
 
           <div class="form-group">
             <label class="control-label">Autor</label>
-            <!-- Caixa de texto AUTOR-->
-            <input class="form-control" placeholder="Autor" name="autorID" id="cmbAutor" value="autorID"
-              #autorID="ngModel" [(ngModel)]="service.formData.autorID" required
-              [class.invalid]="autorID.invalid && autorID.touched" />
+            <!-- ComboBox Autor -->
+            <select class="form-select" aria-label="Autor"
+            name="autorID" id="cmbAutor"
+            #autorID="ngModel" [(ngModel)]="service.formData.autorID"
+              [class.invalid]="autorID.invalid && autorID.touched">
 
-            <span class="text-danger">Digite o "autorID" do Livro</span>
+              <option value="0">Nenhum selecionado</option>
+              <option *ngFor="let autor of service.autoresList" value="{{autor.id}}">{{autor.nome}}</option>
+            </select>
+
           </div>
         </div>
 
         <div class="col-md-6 col-lg-4">
 
           <div class="form-group">
-            <label class="control-label">Autor</label>
+            <label class="control-label">Fornecedor</label>
             <!-- Caixa de texto FORNECEDOR-->
-            <input class="form-control" placeholder="Fornecedor" name="fornecedorID" id="cmbFornecedor"
-              value="fornecedorID" #fornecedorID="ngModel" [(ngModel)]="service.formData.fornecedorID" required
-              [class.invalid]="fornecedorID.invalid && fornecedorID.touched" />
+            <select class="form-select" aria-label="Fornecedor"
+            name="fornecedorID" id="cmbFornecedor"
+            #fornecedorID="ngModel" [(ngModel)]="service.formData.fornecedorID"
+              [class.invalid]="fornecedorID.invalid && fornecedorID.touched">
 
-            <span class="text-danger">Digite o "fornecedorID" do Livro</span>
+              <option value="0">Nenhum selecionado</option>
+              <option *ngFor="let fornecedor of service.fornecedoresList" value="{{fornecedor.id}}">{{fornecedor.nome}}</option>
+            </select>
+
           </div>
         </div>
       </div>
@@ -87,12 +95,10 @@
         <div class="col-12 col-md-8">
           <div class="form-group">
             <br />
-            <button class="btn btn-primary" type="submit" [disabled]="form.invalid" value="Salvar">Salvar</button>
+            <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Salvar</button>
           </div>
         </div>
       </div>
     </div>
   </form>
-  <!-- ainda não --> 
-  <!-- beleza -->
 </div>
