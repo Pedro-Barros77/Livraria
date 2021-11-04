@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
 namespace Livraria_API.Models
 {
@@ -13,6 +14,12 @@ namespace Livraria_API.Models
         public string Titulo { get; set; }
 
         public float Valor { get; set; }
+
+        // [StringLength(50)]
+        // public string FileName { get; set; }
+        // [StringLength(5, MinimumLength=4)]
+        // public string FileExt { get; set; }
+        // public byte[] FileData { get; set; }
 
         [ForeignKey("Autor")]
         public int? AutorID { get; set; }

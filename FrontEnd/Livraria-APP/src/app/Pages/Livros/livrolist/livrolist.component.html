@@ -73,7 +73,7 @@
 
     <tbody *ngIf="service.livrosList && service.livrosList.length" class="table-light">
 
-      <tr *ngFor="let livro of service.filteredLivros; index as i">
+      <tr *ngFor="let livro of service.filteredLivros; index as i;">
           <td>
             <button type="button" class="btn btn-outline-secondary btnAction" [routerLink]="['/livros-edit']"
               (click)="populateForm(livro)">
@@ -91,7 +91,7 @@
           </td>
           <td>img</td>
           <td>{{livro.titulo}}</td>
-          <td>{{livro.valor}}</td>
+          <td>{{valorEmReais(livro.valor)}}</td>
           <td>{{service.getAutor(livro.id)?.nome}}</td>
           <td>{{service.getFornecedor(livro.id)?.nome}}</td>
       </tr>

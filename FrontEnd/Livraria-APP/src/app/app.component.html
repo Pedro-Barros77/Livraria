@@ -1,2 +1,9 @@
-<nav-bar></nav-bar>
+<ng-container *ngIf="!isHomePage(); else elseBlock">
+  <nav-bar></nav-bar>
+</ng-container>
+
+<ng-template #elseBlock>
+  <client-nav-bar></client-nav-bar>
+</ng-template>
+
 <router-outlet></router-outlet>

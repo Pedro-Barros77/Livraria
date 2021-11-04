@@ -1,0 +1,34 @@
+<div id="bannerHome" class="text-center">
+  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+
+      <div class="carousel-item active">
+        <div class="row">
+            <!-- Para cada livro na lista de livros, uma nova coluna com 1/3 do espaço (4) -->
+          <div class="col-4" *ngFor="let livro of service.livrosList; let i = index;">
+              <!-- Se o i < 6, para entrar somente 6 cards nessa tela do carrossel -->
+            <ng-container *ngIf="i < 6">
+              <card-livro [Livro]="livro"></card-livro>
+            </ng-container>
+          </div>
+
+        </div>
+      </div>
+
+
+
+    </div>
+    <button class="carousel-control-prev bg-dark" type="button" data-bs-target="#carouselExampleControls"
+      data-bs-slide="prev">
+      <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next bg-dark" type="button" data-bs-target="#carouselExampleControls"
+      data-bs-slide="next">
+      <span class="carousel-control-next-icon bg-dark" aria-hidden="true"></span>
+      <span class="visually-hidden">Próximo</span>
+    </button>
+  </div>
+</div>
+
+<!-- <app-list-card></app-list-card> -->

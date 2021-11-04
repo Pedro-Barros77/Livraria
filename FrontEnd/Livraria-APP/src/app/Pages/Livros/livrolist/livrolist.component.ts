@@ -1,7 +1,6 @@
 import { Livro } from 'src/app/Shared/livro.model';
 import { LivroServiceService } from './../../../Shared/livro-service.service';
-import { HttpClient } from '@angular/common/http'
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit  } from '@angular/core';
 
 @Component({
   selector: 'livros-list',
@@ -17,6 +16,7 @@ export class LivroListComponent implements OnInit {
     this.service.refreshAutores();
     this.service.refreshFornecedores();
   }
+  
 
   populateForm(selectedRecord: Livro) {
     this.service.formData = Object.assign({}, selectedRecord);
@@ -25,10 +25,11 @@ export class LivroListComponent implements OnInit {
   deleteLiv() {
     let body = document.querySelector("#modalBody");
     let id = body?.getAttribute("name");
-    this.service.deleteLivro(parseInt(id!)).subscribe();
+    this.service.deleteLivro(parseInt(id!)).subscribe(
+      response => this.service.refreshList()
+    );
 
-    // document.querySelector("#tabelaLiv")!
-    this.service.refreshList();
+    // setTimeout(() => {this.service.refreshList();}, 1000)
 
     body!.innerHTML = '';
   }
@@ -66,6 +67,9 @@ export class LivroListComponent implements OnInit {
     body?.appendChild(pValor);
     body?.appendChild(pAutor);
     body?.appendChild(pFornecedor);
+  }
 
+  valorEmReais(valor:string):string{
+    return parseFloat(valor).toLocaleString('pt-br',{style: 'currency',currency: 'BRL'});
   }
 }

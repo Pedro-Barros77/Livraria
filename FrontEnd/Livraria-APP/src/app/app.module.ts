@@ -12,6 +12,11 @@ import { LivroCreateComponent } from './Pages/Livros/livrocreate/livrocreate.com
 import { LivroDetailsComponent } from './Pages/Livros/livrodetails/livrodetails.component';
 import { NavBarComponent } from './Components/nav-bar/nav-bar.component';
 import { CurrencyPipe } from '@angular/common';
+import { HomeComponent } from './Pages/Cliente/home/home.component';
+import { ContatoComponent } from './Pages/Cliente/contato/contato.component';
+import { QuemSomosComponent } from './Pages/Cliente/quem-somos/quem-somos.component';
+import { ClientNavBarComponent } from './Components/client-nav-bar/client-nav-bar.component';
+import { CardLivroComponent } from './Components/card-livro/card-livro.component';
 
 @NgModule({
   declarations: [
@@ -20,13 +25,18 @@ import { CurrencyPipe } from '@angular/common';
     LivroEditComponent,
     LivroCreateComponent,
     LivroDetailsComponent,
-    NavBarComponent
+    NavBarComponent,
+    HomeComponent,
+    ContatoComponent,
+    QuemSomosComponent,
+    ClientNavBarComponent,
+    CardLivroComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule,  
+    FormsModule,
     ReactiveFormsModule
   ],
   providers: [CurrencyPipe],

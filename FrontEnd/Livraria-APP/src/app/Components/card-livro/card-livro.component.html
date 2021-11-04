@@ -1,0 +1,9 @@
+<div class="card" style="width: 16rem;">
+  <!-- <img src="img" class="card-img-top" alt="..."> -->
+  <div class="card-body">
+    <h5 class="card-title">{{Livro.titulo}}</h5>
+    <p class="card-text">{{Livro.valor.toLocaleString("pt-br",{style: "currency",currency: "BRL"})}}</p>
+    <p class="card-text">{{service.getAutor(Livro.id)?.nome}}</p>
+    <a href="#" class="btn btn-primary">Ver mais</a>
+  </div>
+</div>

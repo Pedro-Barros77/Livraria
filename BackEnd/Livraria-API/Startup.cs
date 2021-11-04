@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +34,7 @@ namespace Livraria_API
             );
             services.AddControllers();
             services.AddCors();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Livraria_API", Version = "v1" });
@@ -50,6 +52,12 @@ namespace Livraria_API
             }
 
             app.UseHttpsRedirection();
+
+            var cultures = new []{"pt-BR"};
+            app.UseRequestLocalization(new RequestLocalizationOptions()
+                .SetDefaultCulture(cultures[0])
+                .AddSupportedCultures(cultures)
+            );
 
             app.UseRouting();
 

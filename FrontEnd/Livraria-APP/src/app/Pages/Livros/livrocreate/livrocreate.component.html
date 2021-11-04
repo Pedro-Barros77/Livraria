@@ -41,25 +41,22 @@
           <div class="form-group">
             <label class="control-label">Valor</label>
             <!-- Caixa de texto VALOR-->
-            <input class="form-control txtCurrency" placeholder="Valor" name="valor" id="txtValor" value="valor" #valor="ngModel"
-              [(ngModel)]="service.formData.valor" required [class.invalid]="valor.invalid && valor.touched"
-              [value]="service.formData.valor"
-              (blur)="service.updateUSAmount($event)"/>
+            <input class="form-control txtCurrency" placeholder="Valor" name="valor" id="txtValor" value="valor"
+              #valor="ngModel" [(ngModel)]="service.formData.valor" required
+              [class.invalid]="valor.invalid && valor.touched" />
             <span class="text-danger invalid-feedback">Campo Valor obrigatório.</span>
           </div>
         </div>
       </div>
-        
+
       <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
 
           <div class="form-group">
             <label class="control-label">Autor</label>
             <!-- ComboBox Autor -->
-            <select class="form-select" aria-label="Autor"
-            name="autorID" id="cmbAutor"
-            #autorID="ngModel" [(ngModel)]="service.formData.autorID"
-              [class.invalid]="autorID.invalid && autorID.touched">
+            <select class="form-select" aria-label="Autor" name="autorID" id="cmbAutor" #autorID="ngModel"
+              [(ngModel)]="service.formData.autorID" [class.invalid]="autorID.invalid && autorID.touched">
 
               <option value="0">Nenhum selecionado</option>
               <option *ngFor="let autor of service.autoresList" value="{{autor.id}}">{{autor.nome}}</option>
@@ -73,16 +70,28 @@
           <div class="form-group">
             <label class="control-label">Fornecedor</label>
             <!-- Caixa de texto FORNECEDOR-->
-            <select class="form-select" aria-label="Fornecedor"
-            name="fornecedorID" id="cmbFornecedor"
-            #fornecedorID="ngModel" [(ngModel)]="service.formData.fornecedorID"
+            <select class="form-select" aria-label="Fornecedor" name="fornecedorID" id="cmbFornecedor"
+              #fornecedorID="ngModel" [(ngModel)]="service.formData.fornecedorID"
               [class.invalid]="fornecedorID.invalid && fornecedorID.touched">
 
               <option value="0">Nenhum selecionado</option>
-              <option *ngFor="let fornecedor of service.fornecedoresList" value="{{fornecedor.id}}">{{fornecedor.nome}}</option>
+              <option *ngFor="let fornecedor of service.fornecedoresList" value="{{fornecedor.id}}">{{fornecedor.nome}}
+              </option>
             </select>
 
           </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+
+        <div class="col-md-12 col-lg-8">
+
+          <div class="form-group">
+            <label for="formFile" class="form-label">Enviar Imagem</label>
+            <input (change)="onChange($event)" class="form-control custom-file-input" type="file" id="formFile">
+          </div>
+
         </div>
       </div>
 

@@ -7,6 +7,9 @@ using Livraria_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Net;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace Livraria_API.Controllers
 {
@@ -92,7 +95,6 @@ namespace Livraria_API.Controllers
         [HttpPost]
         public async Task<ActionResult<Livro>> PostLivro(Livro livro)
         {
-
             if(livro.AutorID ==0)
             {
                 livro.AutorID = null;

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LivroServiceService } from './Shared/livro-service.service';
 
 @Component({
@@ -9,8 +9,18 @@ import { LivroServiceService } from './Shared/livro-service.service';
 })
 export class AppComponent {
   title = 'Livraria-APP';
-  constructor(router: Router, public service: LivroServiceService)
-  {
-    router.navigate(["/livros-list"])
+  constructor(
+    router: Router,
+    public service: LivroServiceService,
+    private _Activatedroute: ActivatedRoute
+    )
+    {
+      this.router = router;
+      router.navigate(["/client-home"])
+    }
+    router: Router;
+
+    isHomePage(): boolean{
+    return this.router.url.toString().includes("client");
   }
 }

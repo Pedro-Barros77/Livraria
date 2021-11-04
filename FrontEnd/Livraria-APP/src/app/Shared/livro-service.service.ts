@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Livro } from './livro.model';
 import { Autor } from './autor.model';
 import { Fornecedor } from './fornecedor.model';
-import { CurrencyPipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +11,6 @@ import { CurrencyPipe } from '@angular/common';
 export class LivroServiceService {
 
   formData: Livro = new Livro();
-
-
 
   readonly baseURL = 'https://localhost:5000/api/Livro';
   readonly autorURL = 'https://localhost:5000/api/Autor';
@@ -22,11 +20,20 @@ export class LivroServiceService {
   autoresList: Autor[] = [];
   fornecedoresList: Fornecedor[] = [];
 
-  constructor(private http: HttpClient, private currencyPipe: CurrencyPipe) { }
+  constructor(
+    private http: HttpClient,
+    router: Router) { this.router = router}
 
-  postLivro() {
-    return this.http.post(this.baseURL, this.formData);
+    router: Router;
+  // this.formData.fileName = files[0].name.split('.')[0];
+  // this.formData.fileExt = "." + files[0].name.split('.')[1];
+  // this.formData.fileData = files[0].arrayBuffer();
+
+  postLivro(files: FileList) {
+
+      return this.http.post(this.baseURL,this.formData);
   }
+
   putLivro() {
     return this.http.put(`${this.baseURL}/${this.formData.id}`, this.formData);
   }
@@ -40,9 +47,11 @@ export class LivroServiceService {
       .then(res => {
         this.livrosList = res as Livro[];
         this.filteredLivros = res as Livro[];
-        this.ReOrder();
-        this.ReOrder();
-        console.log("refreshado")
+
+        if(!this.router.url.toString().includes("client")){
+          this.ReOrder();
+          this.ReOrder();
+        }
       });
   }
 
@@ -75,11 +84,7 @@ export class LivroServiceService {
   }
 
 
-//toLocaleString("pt-br",{style: "currency",currency: "BRL"})
-
-  updateUSAmount(event:any) {
-    this.formData.valor = event.target.value;
-  }
+  //toLocaleString("pt-br",{style: "currency",currency: "BRL"})
 
   //Funções de filtro da lista \/ \/ \/
 

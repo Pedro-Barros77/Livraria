@@ -48,8 +48,7 @@
             <!-- Caixa de texto VALOR-->
             <input class="form-control txtCurrency" placeholder="Valor" name="valor" id="txtValor" value="valor" #valor="ngModel"
               [(ngModel)]="service.formData.valor" required [class.invalid]="valor.invalid && valor.touched"
-              [value]="getValor() | currency:'BRL'"
-              (blur)="service.updateUSAmount($event)"/>
+              [value]="getValor()"/>
             <span class="text-danger invalid-feedback">Campo Valor obrigatório.</span>
           </div>
         </div>

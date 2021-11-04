@@ -13,22 +13,36 @@ export class LivroCreateComponent implements OnInit {
 
   constructor(
     public service: LivroServiceService,
-    router: Router) { this.router = router}
+    router: Router) { this.router = router }
 
   router: Router;
 
   ngOnInit(): void {
   }
 
-  onSubmit(form: NgForm) {
-    this.service.formData.id = 0;
-    this.insertRecord(form);
+  //files: Set<File> | undefined;
+
+  selectedFiles: FileList | undefined;
+
+  onChange(event:any) {
+    this.selectedFiles = <FileList>event?.srcElement.files;
+    // this.files = new Set();
+    // this.files.add(selectedFiles[0]);
   }
 
-  insertRecord(form: NgForm) {
-    this.service.postLivro().subscribe(
+  onSubmit(form: NgForm) {
+  
+    this.service.formData.id = 0;
+    this.service.formData.valor = this.service.formData.valor.toString().replace(',', '.');
+
+    this.insertRecord(form, this.selectedFiles!);
+  }
+
+  insertRecord(form: NgForm, files: FileList) {
+    this.service.postLivro(files).subscribe(
       res => {
         this.resetForm(form);
+        console.log(res);
         this.router.navigate(["/livros-list"]);
       },
       err => { console.log(err); }
