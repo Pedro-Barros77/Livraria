@@ -127,6 +127,27 @@ namespace Livraria_API.Controllers
             return NoContent();
         }
 
+        // [HttpDelete("{ids}")]
+        // public async Task<IActionResult> DeleteLivros(string ids)
+        // {
+        //     List<Livro> livros = new List<Livro>();
+        //     foreach (var item in ids.Split(","))
+        //     {
+        //         livros.Add()
+        //     }
+
+        //     var livro = await _context.Livros.FindAsync(id);
+        //     if (livro == null)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     _context.Livros.Remove(livro);
+        //     await _context.SaveChangesAsync();
+
+        //     return NoContent();
+        // }
+
 
     }
 }

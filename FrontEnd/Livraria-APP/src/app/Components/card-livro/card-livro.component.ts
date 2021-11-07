@@ -15,4 +15,12 @@ export class CardLivroComponent implements OnInit {
 
   @Input() Livro: any;
 
+  @Input() imageID: any;
+
+  images: string[] = [
+    "assets/img/Livros/O livro dos espiritos.jpeg",
+    "assets/img/Livros/O ceu e o inferno.jpeg",
+    "assets/img/Livros/Nosso Lar.jpeg",
+    "assets/img/Livros/A caminho da luz.jpeg"
+  ];
 }

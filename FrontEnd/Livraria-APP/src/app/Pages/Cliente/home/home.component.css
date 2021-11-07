@@ -1,19 +1,121 @@
-#bannerHome{
-    width: 100%;
-    height:80vh;
-    overflow: hidden;
-    margin-bottom: 20px;
+.noGap{
+  margin: 0;
+  padding: 0;
 }
 
-#bannerHome img{
-    height: 100%;
-    width: auto;
-    background-color: rgb(20, 20, 20);
+.carousel-inner {
+  background-image: url(../../../../assets/img/banner-livros.jpeg);
+  background-size: cover;
 }
 
-#bannerHome h1{
-position: absolute;
-left: 50vw;
-top:60vh;
-color: white;
+.promocoesContainer {
+  margin-top: 100px;
+  margin-bottom: 60px;
+  background-color: rgb(92, 225, 230);
+}
+
+.eventosContainer {
+  background-color: rgb(195, 128, 128);
+  margin-top: 80px;
+  margin-bottom: 60px;
+}
+
+.doacoesContainer {
+  background-color: rgb(157, 134, 188);
+  margin-top: 80px;
+  margin-bottom: 60px;
+}
+
+.banner2 img {
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  max-height: 170px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.social-link {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  border-radius: 50%;
+  transition: all 0.3s;
+  font-size: 0.9rem;
+}
+
+.social-link:hover,
+.social-link:focus {
+  background: #ddd;
+  text-decoration: none;
+  color: #555;
+}
+
+.list-unstyled {
+  margin: 14px;
+}
+
+footer {
+  padding-top: 20px;
+  border-top: 1px solid rgb(212, 212, 212);
+}
+
+.rounded-circle{
+  transform: scale(1.0,1.0);
+  transition: 500ms;
+}
+
+.shadowIncrease:hover{
+  transform: scale(1.1,1.1);
+  transition: 500ms;
+  box-shadow: 0 2px 15px 2px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.teamCard{
+  transition: 500ms;
+}
+
+.roundContainer {
+  background-image: url(../../../../assets/img/desconto.jpeg);
+  width: 18vw;
+  height: 18vw;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin:auto;
+}
+
+.roundContainer2 {
+  background-image: url(../../../../assets/img/pizza.jpeg);
+  width: 18vw;
+  height: 18vw;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin:auto;
+  margin-bottom: 50px;
+}
+
+.roundContainer3 {
+  background-image: url(../../../../assets/img/faca-sua-doacao.jpeg);
+  width: 18vw;
+  height: 18vw;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin:auto;
+  margin-bottom: 50px;
+}
+
+ol {
+	list-style-type: circle;
+}
+
+li {
+  margin-top: 20px;
 }

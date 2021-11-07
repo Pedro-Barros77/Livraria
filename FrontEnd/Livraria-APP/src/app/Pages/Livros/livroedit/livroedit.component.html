@@ -2,7 +2,7 @@
 
   <div class="row justify-content-lg-center">
     <div class="col col-lg-1">
-      <button id="voltar" class="btn btn-light" routerLink="/livros-list" type="button">
+      <button (click)="resetForm(this.form)" id="voltar" class="btn btn-light" routerLink="/livros-list" type="button">
         <i class="fas fa-arrow-left"></i>
       </button>
     </div>
@@ -53,7 +53,7 @@
           </div>
         </div>
       </div>
-        
+
       <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
 

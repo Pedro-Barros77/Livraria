@@ -1,3 +1,4 @@
+import { DeleteModalComponent } from './../Components/delete-modal/delete-modal.component';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Livro } from './livro.model';
@@ -22,15 +23,15 @@ export class LivroServiceService {
 
   constructor(
     private http: HttpClient,
-    router: Router) { this.router = router}
-
+    router: Router) {
+      this.router = router;
+    }
     router: Router;
   // this.formData.fileName = files[0].name.split('.')[0];
   // this.formData.fileExt = "." + files[0].name.split('.')[1];
   // this.formData.fileData = files[0].arrayBuffer();
 
-  postLivro(files: FileList) {
-
+  postLivro() {
       return this.http.post(this.baseURL,this.formData);
   }
 
@@ -75,12 +76,22 @@ export class LivroServiceService {
 
   getAutor(idLivro: number): any {
     let livro = this.livrosList.find(liv => liv.id == idLivro);
-    return this.autoresList.find(aut => aut.id == livro?.autorID)!;
+    if(livro?.autorID != null){
+      return this.autoresList.find(aut => aut.id == livro?.autorID)!;
+    }
+    else{
+      return null;
+    }
   }
 
   getFornecedor(idLivro: number): any {
     let livro = this.livrosList.find(liv => liv.id == idLivro);
-    return this.fornecedoresList.find(forn => forn.id == livro?.fornecedorID)!;
+    if(livro?.autorID != null){
+      return this.fornecedoresList.find(forn => forn.id == livro?.fornecedorID)!;
+    }
+    else{
+      return null;
+    }
   }
 
 

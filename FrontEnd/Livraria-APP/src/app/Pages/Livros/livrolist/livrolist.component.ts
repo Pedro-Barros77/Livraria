@@ -1,6 +1,9 @@
+import { LivroCreateComponent } from './../livrocreate/livrocreate.component';
+import { Router } from '@angular/router';
+import { DeleteModalComponent } from './../../../Components/delete-modal/delete-modal.component';
 import { Livro } from 'src/app/Shared/livro.model';
 import { LivroServiceService } from './../../../Shared/livro-service.service';
-import { Component, OnInit  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'livros-list',
@@ -9,67 +12,127 @@ import { Component, OnInit  } from '@angular/core';
 })
 export class LivroListComponent implements OnInit {
 
-  constructor(public service: LivroServiceService) { }
+  constructor(
+    public service: LivroServiceService,
+    public router: Router
+  ) {
+
+  }
 
   ngOnInit(): void {
     this.service.refreshList();
     this.service.refreshAutores();
     this.service.refreshFornecedores();
   }
-  
 
   populateForm(selectedRecord: Livro) {
     this.service.formData = Object.assign({}, selectedRecord);
   }
 
-  deleteLiv() {
-    let body = document.querySelector("#modalBody");
-    let id = body?.getAttribute("name");
-    this.service.deleteLivro(parseInt(id!)).subscribe(
-      response => this.service.refreshList()
-    );
+  postTests() {
+    let tests: Livro[] = [];
+    for (let i = 0; i < 10; i++) {
+      tests.push(<Livro>{
+        id: 0,
+        titulo: "Teste " + (i),
+        valor: Math.floor(Math.random() * 200.25).toString(),
+        autorID: 1,
+        fornecedorID: 1
+      });
+    }
 
-    // setTimeout(() => {this.service.refreshList();}, 1000)
-
-    body!.innerHTML = '';
+    tests.forEach(livro => {
+      this.service.formData = livro;
+      this.service.postLivro().subscribe(
+        res => {
+          if (livro == tests[tests.length - 1]) {
+            setTimeout(() => {
+              this.service.refreshList();
+            }, 500);
+          }
+        },
+        err => { console.log("Erro:" + err); }
+      );
+      this.service.formData = new Livro();
+    });
   }
 
-  buildModal(livro: Livro) {
-    let body = document.querySelector("#modalBody");
-    body?.setAttribute("name", livro.id.toString());
-
-    body!.innerHTML = '';
-
-    let pTitulo = document.createElement("p");
-    pTitulo.innerText = "Titulo: " + livro.titulo;
-
-    let pValor = document.createElement("p");
-    pValor.innerText = "Valor: " + livro.valor;
-
-    let pAutor = document.createElement("p");
-    if (livro.autorID != null) {
-      pAutor.innerText = "Autor: " + this.service.getAutor(livro.id).nome;
-    }
-    else{
-      pAutor.innerText = "Autor: Nenhum Selecionado";
-    }
-
-    let pFornecedor = document.createElement("p");
-    if (livro.fornecedorID != null) {
-      pFornecedor.innerText = "Fornecedor: " + this.service.getFornecedor(livro.id).nome;
-    }
-    else{
-      pAutor.innerText = "Fornecedor: Nenhum Selecionado";
-    }
 
 
-    body?.appendChild(pTitulo);
-    body?.appendChild(pValor);
-    body?.appendChild(pAutor);
-    body?.appendChild(pFornecedor);
+  modalDeleteSingle(livro: Livro) {
+    let delModal: DeleteModalComponent = new DeleteModalComponent(this, this.service);
+    delModal.setLivro(livro);
   }
 
-  valorEmReais(valor:string):string{
-    return parseFloat(valor).toLocaleString('pt-br',{style: 'currency',currency: 'BRL'});
+  modalDeleteMultiple(ids: number[]) {
+    if (ids.length > 0) {
+      let delModal: DeleteModalComponent = new DeleteModalComponent(this, this.service);
+      delModal.setIds(ids);
+      (<HTMLButtonElement>document.getElementById("callDeleteModal")).click();
+    }
+  }
+
+
+  valorEmReais(valor: string): string {
+    return parseFloat(valor).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+  }
+
+
+  selectedLivros: Livro[] = [];
+  selecting: boolean = false;
+
+  startSelection() {
+    let btnSelecionar = document.getElementById("btnSelecionar")!;
+
+    this.selecting = !this.selecting;
+
+    if (this.selecting) {
+      btnSelecionar.style.display = "none";
+    }
+    else {
+      btnSelecionar.style.display = "block";
+      btnSelecionar.innerHTML = "Selecionar";
+      btnSelecionar.style.backgroundColor = "rgb(208, 238, 223)";
+    }
+  }
+
+  cancelSelection() {
+    let btnSelecionar = document.getElementById("btnSelecionar")!;
+
+    this.selecting = false;
+    btnSelecionar.style.display = "block";
+    btnSelecionar.innerHTML = "Selecionar";
+    btnSelecionar.style.backgroundColor = "rgb(208, 238, 223)";
+  }
+
+  selectAll() {
+    let checks = document.getElementsByClassName("ckbSelect");
+    Array.from(checks).forEach(item => {
+      let check = item as HTMLInputElement;
+      check.checked = true;
+    });
+  }
+
+  setExcludeBtn() {
+    let btnDelteSelected = document.getElementById("deleteSelected");
+    if (this.getSelectedIds().length > 0) {
+      if (btnDelteSelected?.classList.contains("disabled"))
+        btnDelteSelected?.classList.remove("disabled");
+    }
+    else {
+      if (!btnDelteSelected?.classList.contains("disabled"))
+        btnDelteSelected?.classList.add("disabled");
+    }
+  }
+
+  getSelectedIds(): number[] {
+    let IDs: number[] = [];
+    let checks = document.getElementsByClassName("ckbSelect") as HTMLCollectionOf<HTMLInputElement>;
+
+    Array.from(checks).filter(c => c.checked)!.forEach(item => {
+      let id = parseInt(item.value);
+      IDs.push(id);
+    });
+    return IDs;
   }
 }

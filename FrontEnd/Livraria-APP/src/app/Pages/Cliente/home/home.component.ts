@@ -16,4 +16,8 @@ export class HomeComponent implements OnInit {
     this.service.refreshAutores();
     this.service.refreshFornecedores();
   }
+
+  getLivros(array: any[]): any[]{
+    return array.slice(4);
+  }
 }

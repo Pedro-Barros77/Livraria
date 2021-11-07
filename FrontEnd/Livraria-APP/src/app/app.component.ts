@@ -16,7 +16,7 @@ export class AppComponent {
     )
     {
       this.router = router;
-      router.navigate(["/client-home"])
+      router.navigate(["/livros-list"])
     }
     router: Router;
 

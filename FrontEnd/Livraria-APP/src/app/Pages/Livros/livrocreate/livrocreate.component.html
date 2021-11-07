@@ -2,7 +2,7 @@
 
   <div class="row justify-content-lg-center">
     <div class="col col-lg-1">
-      <button id="voltar" class="btn btn-light" routerLink="/livros-list" type="button">
+      <button (click)="resetForm(this.form)" id="voltar" class="btn btn-light" routerLink="/livros-list" type="button">
         <i class="fas fa-arrow-left"></i>
       </button>
     </div>
@@ -99,6 +99,7 @@
         <div class="col-12 col-md-8">
           <div class="form-group">
             <br />
+            <button id="callModal" style="display: none;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#duplicateModal" type="button"></button>
             <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Salvar</button>
           </div>
         </div>
@@ -106,3 +107,5 @@
     </div>
   </form>
 </div>
+
+<duplicate-modal></duplicate-modal>
