@@ -25,3 +25,7 @@
   .invalid-feedback{
     font-size: smaller;
   }
+
+  #btnDeleteImg{
+    width: 100%;
+  }

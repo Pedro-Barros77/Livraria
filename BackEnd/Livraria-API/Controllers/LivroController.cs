@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 using System.IO;
 
 namespace Livraria_API.Controllers
@@ -17,12 +18,16 @@ namespace Livraria_API.Controllers
     [Route("api/[controller]")]
     public class LivroController : ControllerBase
     {
-        private readonly LivrariaContext _context;
-
-        public LivroController(LivrariaContext context)
+        public LivroController(LivrariaContext context, IWebHostEnvironment _webHostEnvironment, IHttpContextAccessor _httpContextAccessor)
         {
+            this.webHostEnvironment = _webHostEnvironment;
+            this.httpContextAccessor = _httpContextAccessor;
             _context = context;
         }
+
+        private readonly LivrariaContext _context;
+        private IWebHostEnvironment webHostEnvironment;
+        private IHttpContextAccessor httpContextAccessor;
 
         private bool LivroExists(int id)
         {
@@ -32,6 +37,12 @@ namespace Livraria_API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Livro>>> GetLivros()
+        {
+            return await _context.Livros.ToListAsync();
+        }
+
+        [HttpGet("produtos")]
+        public async Task<ActionResult<IEnumerable<Livro>>> GetProdutos()
         {
             return await _context.Livros.ToListAsync();
         }
@@ -59,12 +70,12 @@ namespace Livraria_API.Controllers
                 return BadRequest();
             }
 
-            if(livro.AutorID ==0)
+            if (livro.AutorID == 0)
             {
                 livro.AutorID = null;
                 livro.Autor = null;
             }
-            if(livro.FornecedorID ==0)
+            if (livro.FornecedorID == 0)
             {
                 livro.FornecedorID = null;
                 livro.Fornecedor = null;
@@ -91,25 +102,69 @@ namespace Livraria_API.Controllers
             return NoContent();
         }
 
-
         [HttpPost]
-        public async Task<ActionResult<Livro>> PostLivro(Livro livro)
+        public async Task<ActionResult> PostLivro(Livro livro)
         {
-            if(livro.AutorID ==0)
+            try
             {
-                livro.AutorID = null;
-                livro.Autor = null;
+                if (livro.AutorID == 0)
+                {
+                    livro.AutorID = null;
+                    livro.Autor = null;
+                }
+                if (livro.FornecedorID == 0)
+                {
+                    livro.FornecedorID = null;
+                    livro.Fornecedor = null;
+                }
+
+                _context.Livros.Add(livro);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { id = livro.ID });
+                //return CreatedAtAction("GetLivro", new { id = livro.ID }, livro);
             }
-            if(livro.FornecedorID ==0)
+            catch (Exception ex)
             {
-                livro.FornecedorID = null;
-                livro.Fornecedor = null;
+                return BadRequest(new { Message = ex.Message, StackTrace = ex.StackTrace, RootPath = webHostEnvironment.WebRootPath });
             }
+        }
 
-            _context.Livros.Add(livro);
-            await _context.SaveChangesAsync();
+        [Produces("application/json")]
+        [HttpPost("image/{id}")]
+        public async Task<IActionResult> PostImage(IFormFile file, int id)
+        // public async Task<IActionResult> PostLivro(IFormFile? file)
+        {
+            try
+            {
+                if (file != null && file.Length > 0)
+                {
+                    string newFileName = $"{id}.{file.FileName.Split(".")[1]}";
+                    string path = Path.Combine(webHostEnvironment.WebRootPath, "uploads", newFileName);
 
-            return CreatedAtAction("GetLivro", new { id = livro.ID }, livro);
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+                    var baseURL = httpContextAccessor.HttpContext.Request.Scheme + "://" +
+                    httpContextAccessor.HttpContext.Request.Host +
+                    httpContextAccessor.HttpContext.Request.PathBase;
+
+
+                    //return CreatedAtAction("GetLivro", new { id = livro.ID, fileName = baseURL + "/uploads/" + file.FileName }, livro);
+
+                    return Ok(new { fileName = baseURL + "/uploads/" + newFileName});
+                }
+                else
+                {
+                    return BadRequest(new { erro = "Arquivo nulo", tipo = file.GetType(), tamanho = file.Length });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message, StackTrace = ex.StackTrace, RootPath = webHostEnvironment.WebRootPath });
+            }
         }
 
         [HttpDelete("{id}")]

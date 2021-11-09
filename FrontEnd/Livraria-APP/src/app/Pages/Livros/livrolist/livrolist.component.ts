@@ -1,3 +1,4 @@
+import { DetailsModalComponent } from './../../../Components/details-modal/details-modal.component';
 import { LivroCreateComponent } from './../livrocreate/livrocreate.component';
 import { Router } from '@angular/router';
 import { DeleteModalComponent } from './../../../Components/delete-modal/delete-modal.component';
@@ -19,6 +20,7 @@ export class LivroListComponent implements OnInit {
 
   }
 
+
   ngOnInit(): void {
     this.service.refreshList();
     this.service.refreshAutores();
@@ -35,7 +37,7 @@ export class LivroListComponent implements OnInit {
       tests.push(<Livro>{
         id: 0,
         titulo: "Teste " + (i),
-        valor: Math.floor(Math.random() * 200.25).toString(),
+        valor: Math.floor(Math.random() * 200.25),
         autorID: 1,
         fornecedorID: 1
       });
@@ -72,6 +74,12 @@ export class LivroListComponent implements OnInit {
     }
   }
 
+  openDetails(livro: Livro){
+    this.populateForm(livro);
+    let detailsModal = new DetailsModalComponent(this, this.service);
+    detailsModal.setImage();
+  }
+
 
   valorEmReais(valor: string): string {
     return parseFloat(valor).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
@@ -95,6 +103,7 @@ export class LivroListComponent implements OnInit {
       btnSelecionar.style.backgroundColor = "rgb(208, 238, 223)";
     }
   }
+
 
   cancelSelection() {
     let btnSelecionar = document.getElementById("btnSelecionar")!;
@@ -134,5 +143,18 @@ export class LivroListComponent implements OnInit {
       IDs.push(id);
     });
     return IDs;
+  }
+
+  hoverImg(id: number){
+    let img = document.getElementById("img-" + id)!;
+
+    // img.classList.add("translate-middle");
+    //img.style.transform = "translate(0,-120px)";
+  }
+
+  blurImg(id: number){
+    let img = document.getElementById("img-" + id)!;
+    // img.classList.remove("translate-middle");
+    // img.classList.add("translate-middle-x");
   }
 }

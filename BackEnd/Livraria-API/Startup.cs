@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace Livraria_API
 {
@@ -32,7 +33,13 @@ namespace Livraria_API
             services.AddDbContext<LivrariaContext>(
                 context => context.UseSqlServer(Configuration.GetConnectionString("default"))
             );
+
+            services.AddControllersWithViews();
+
             services.AddControllers();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddCors();
 
             services.AddSwaggerGen(c =>
@@ -58,6 +65,8 @@ namespace Livraria_API
                 .SetDefaultCulture(cultures[0])
                 .AddSupportedCultures(cultures)
             );
+
+            app.UseStaticFiles();
 
             app.UseRouting();
 

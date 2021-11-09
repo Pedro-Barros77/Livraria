@@ -4,6 +4,7 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { LivroServiceService } from 'src/app/Shared/livro-service.service';
 import { NgForm } from '@angular/forms';
 import { Livro } from 'src/app/Shared/livro.model';
+import { HttpResponse } from '@angular/common/http';
 
 declare var jQuery: any;
 
@@ -23,22 +24,24 @@ export class LivroCreateComponent implements OnInit {
   }
 
   router: Router;
+  public service: LivroServiceService;
 
   ngOnInit(): void {
   }
 
-  //files: Set<File> | undefined;
-
-  public service: LivroServiceService;
-  selectedFiles: FileList | undefined;
-
-  onChange(event: any) {
-    this.selectedFiles = <FileList>event?.srcElement.files;
-    // this.files = new Set();
-    // this.files.add(selectedFiles[0]);
-  }
+  file: File | null = null;
 
   public thisForm: NgForm | undefined;
+  public fileForm: FormData | null = null;
+
+  selectFile(event: any) {
+    if (event.target.files.length > 0) {
+      this.file = event.target.files[0];
+      this.fileForm = new FormData();
+      this.fileForm.append('file', this.file!);
+    }
+  }
+
 
   onSubmit(form: NgForm) {
     this.thisForm = form;
@@ -60,24 +63,59 @@ export class LivroCreateComponent implements OnInit {
     this.setUpperCase();
 
     this.service.formData.id = 0;
-    this.service.formData.valor = this.service.formData.valor.toString().replace(',', '.');
+    this.service.formData.valor = parseFloat(this.service.formData.valor.toString().replace(',', '.'));
 
-    this.insertRecord(this.thisForm!, this.selectedFiles!);
+    if(this.file != null){
+      let ext = "." + this.file?.name.toString()!.split(".")[1];
+      this.service.formData.imageExt = ext;
+    }
+
+    this.insertRecord(this.thisForm!);
   }
 
-  setUpperCase(){
+  insertRecord(form: NgForm) {
+    let hasFile: boolean = !(this.fileForm == null || this.fileForm == undefined);
+    this.service.fileData = this.fileForm!;
+
+    this.service.postLivro().subscribe(
+      response => {
+        this.resetForm(form);
+        let id: number = (response as ResponseId).id;
+
+        if (hasFile) {
+          this.service.postImage(id).subscribe(
+            res => {
+              console.log(res);
+            },
+            err => { console.log(err); }
+          );
+        }
+
+        this.router.navigate(["/livros-list"]);
+        this.fileForm = null;
+      },
+      err => { console.log(err); }
+    );
+  }
+
+  resetForm(form: NgForm) {
+    form.form.reset();
+    this.service.formData = new Livro();
+  }
+
+  setUpperCase() {
     let palavras: string[] = this.thisForm!.controls["titulo"].value.toString().split(" ");
     let novoTitulo: string = "";
 
     palavras.forEach(palavra => {
       let novaPalavra: string = "";
-      if(palavra.length > 3 || palavras.indexOf(palavra) == 0){
+      if (palavra.length > 3 || palavras.indexOf(palavra) == 0) {
         novaPalavra = palavra[0].toLocaleUpperCase() + palavra.substring(1);
       }
-      else{
+      else {
         novaPalavra = palavra;
       }
-      if(palavras.indexOf(palavra) > 0){
+      if (palavras.indexOf(palavra) > 0) {
         novoTitulo += " ";
       }
       novoTitulo += novaPalavra;
@@ -143,20 +181,8 @@ export class LivroCreateComponent implements OnInit {
       return [];
     }
   }
+}
 
-  insertRecord(form: NgForm, files: FileList) {
-    this.service.postLivro().subscribe(
-      res => {
-        this.resetForm(form);
-        console.log(res);
-        this.router.navigate(["/livros-list"]);
-      },
-      err => { console.log(err); }
-    );
-  }
-
-  resetForm(form: NgForm) {
-    form.form.reset();
-    this.service.formData = new Livro();
-  }
+class ResponseId {
+  id = 0
 }

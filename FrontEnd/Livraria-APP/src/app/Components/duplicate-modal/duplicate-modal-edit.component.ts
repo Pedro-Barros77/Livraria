@@ -1,29 +1,28 @@
-import { LivroEditComponent } from './../../Pages/Livros/livroedit/livroedit.component';
+import { LivroEditComponent } from '../../Pages/Livros/livroedit/livroedit.component';
 import { NgForm } from '@angular/forms';
-import { LivroCreateComponent } from './../../Pages/Livros/livrocreate/livrocreate.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { LivroServiceService } from 'src/app/Shared/livro-service.service';
 import { Livro } from 'src/app/Shared/livro.model';
 
 @Component({
-  selector: 'duplicate-modal',
+  selector: 'duplicate-modal-edit',
   templateUrl: './duplicate-modal.component.html',
   styleUrls: ['./duplicate-modal.component.css']
 })
-export class DuplicateModalComponent implements OnInit {
+export class DuplicateModalEditComponent implements OnInit {
 
   constructor(
     service: LivroServiceService,
-    livroCreate: LivroCreateComponent
+    livroEdit: LivroEditComponent
   ) {
     this.service = service;
-    this.livroCreate = livroCreate!;
+    this.livroEdit = livroEdit!;
   }
 
   ngOnInit(): void {
   }
 
-  public livroCreate: LivroCreateComponent;
+  public livroEdit: LivroEditComponent;
 
   public service: LivroServiceService;
   public createForm: NgForm | undefined;
@@ -74,6 +73,6 @@ export class DuplicateModalComponent implements OnInit {
   confirmCreate() {
     let body = document.getElementById("modalBodyDuplicate")!;
     body.innerHTML = "";
-    this.livroCreate!.confirmCreate();
+    this.livroEdit!.confirmUpdate();
   }
 }

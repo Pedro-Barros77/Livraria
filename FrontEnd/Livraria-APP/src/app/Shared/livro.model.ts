@@ -1,7 +1,8 @@
 export class Livro {
   id: number = 0;
   titulo: string = '';
-  valor: string = '';
+  valor: number = 0;
   autorID: number = 0;
   fornecedorID: number = 0;
+  imageExt: string = '';
 }

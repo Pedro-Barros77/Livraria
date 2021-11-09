@@ -15,11 +15,7 @@ namespace Livraria_API.Models
 
         public float Valor { get; set; }
 
-        // [StringLength(50)]
-        // public string FileName { get; set; }
-        // [StringLength(5, MinimumLength=4)]
-        // public string FileExt { get; set; }
-        // public byte[] FileData { get; set; }
+        public string ImageExt { get; set; }
 
         [ForeignKey("Autor")]
         public int? AutorID { get; set; }
@@ -28,6 +24,5 @@ namespace Livraria_API.Models
         [ForeignKey("Fornecedor")]
         public int? FornecedorID { get; set; }
         public virtual Fornecedor? Fornecedor { get; set; }
-
     }
 }

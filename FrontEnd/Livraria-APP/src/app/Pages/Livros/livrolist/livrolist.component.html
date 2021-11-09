@@ -67,7 +67,7 @@
   <table id="tabela" class="table table-striped table-hover">
     <thead class="table-dark">
       <tr>
-        <th class="col-1">
+        <th class="col-2">
           <div class="row noGap align-items-center">
             <div class="col-auto noGap">
               <button id="btnSelecionar" (click)="startSelection()" type="button"
@@ -82,20 +82,22 @@
                 </button>
                 <ul class="dropdown-menu slcOptions" aria-labelledby="selectionOptions">
                   <li><a (click)="selectAll()" class="dropdown-item">Selecionar tudo</a></li>
-                  <li><a id="deleteSelected" (click)="modalDeleteMultiple(getSelectedIds())" class="dropdown-item disabled">Excluir selecionados</a>
+                  <li><a id="deleteSelected" (click)="modalDeleteMultiple(getSelectedIds())"
+                      class="dropdown-item disabled">Excluir selecionados</a>
                   </li>
                   <li>
                     <hr class="dropdown-divider">
                   </li>
                   <li><a (click)="cancelSelection()" class="dropdown-item">Cancelar seleção</a></li>
                 </ul>
-                <button id="callDeleteModal" style="display: none;" data-bs-toggle="modal" data-bs-target="#deleteModal"></button>
+                <button id="callDeleteModal" style="display: none;" data-bs-toggle="modal"
+                  data-bs-target="#deleteModal"></button>
               </div>
 
             </div>
           </div>
         </th>
-        <th class="col-2">
+        <th class="col-1">
           <p>Imagem</p>
         </th>
         <th class="col-4">
@@ -121,8 +123,8 @@
             [routerLink]="['/livros-edit']" (click)="populateForm(livro)">
             <i class="fas fa-pen"></i>
           </button>
-          <button type="button" class="btn btn-outline-primary btnAction"
-            (click)="populateForm(livro)" data-bs-toggle="modal" data-bs-target="#detailsModal">
+          <button *ngIf="!selecting" type="button" class="btn btn-outline-primary btnAction" (click)="openDetails(livro)"
+            data-bs-toggle="modal" data-bs-target="#detailsModal">
             <i class="fas fa-search"></i>
           </button>
           <button *ngIf="!selecting" (click)="modalDeleteSingle(livro)" data-bs-toggle="modal"
@@ -131,13 +133,21 @@
           </button>
 
           <div *ngIf="selecting">
-            <input (click)="setExcludeBtn()" class="form-check-input ckbSelect" type="checkbox" value="{{livro.id}}" aria-label="...">
+            <input (click)="setExcludeBtn()" class="form-check-input ckbSelect" type="checkbox" value="{{livro.id}}"
+              aria-label="...">
           </div>
 
         </td>
-        <td>img</td>
+        <td class="text-center">
+          <div>
+            <img id="img-{{livro.id}}" (mouseenter)="hoverImg(livro.id)" (mouseleave)="blurImg(livro.id)"
+              *ngIf="livro.imageExt != null && livro.imageExt.length > 1; else ifNoImage" class="livroImg"
+              src="{{service.imageURL + livro.id + livro.imageExt}}" alt="Img">
+            <ng-template #ifNoImage>img</ng-template>
+          </div>
+        </td>
         <td>{{livro.titulo}}</td>
-        <td>{{valorEmReais(livro.valor)}}</td>
+        <td>{{valorEmReais(livro.valor.toString())}}</td>
         <td>{{service.getAutor(livro.id)?.nome}}</td>
         <td>{{service.getFornecedor(livro.id)?.nome}}</td>
       </tr>

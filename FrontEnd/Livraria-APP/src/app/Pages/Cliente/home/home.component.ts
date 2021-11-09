@@ -9,7 +9,8 @@ import { LivroServiceService } from './../../../Shared/livro-service.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(public service: LivroServiceService) { }
+  constructor(
+    public service: LivroServiceService) { }
 
   ngOnInit(): void {
     this.service.refreshList();

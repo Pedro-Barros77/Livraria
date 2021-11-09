@@ -1,3 +1,4 @@
+import { DuplicateModalEditComponent } from 'src/app/Components/duplicate-modal/duplicate-modal-edit.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {HttpClientModule} from '@angular/common/http'
@@ -19,22 +20,32 @@ import { CardLivroComponent } from './Components/card-livro/card-livro.component
 import { DeleteModalComponent } from './Components/delete-modal/delete-modal.component';
 import { DuplicateModalComponent } from './Components/duplicate-modal/duplicate-modal.component';
 import { DetailsModalComponent } from './Components/details-modal/details-modal.component';
+import { AutorlistComponent } from './Pages/Autores/autorlist/autorlist.component';
+import { AutorcreateComponent } from './Pages/Autores/autorcreate/autorcreate.component';
+import { FornecedorlistComponent } from './Pages/Fornecedores/fornecedorlist/fornecedorlist.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LivroListComponent,
-    LivroEditComponent,
-    LivroCreateComponent,
     NavBarComponent,
-    HomeComponent,
-    ContatoComponent,
-    QuemSomosComponent,
-    ClientNavBarComponent,
     CardLivroComponent,
     DeleteModalComponent,
     DuplicateModalComponent,
-    DetailsModalComponent
+    DuplicateModalEditComponent,
+    DetailsModalComponent,
+
+    LivroListComponent,
+    LivroCreateComponent,
+    LivroEditComponent,
+    
+    AutorlistComponent,
+    AutorcreateComponent,
+
+    ClientNavBarComponent,
+    HomeComponent,
+    ContatoComponent,
+    QuemSomosComponent,
+    FornecedorlistComponent
   ],
   imports: [
     BrowserModule,

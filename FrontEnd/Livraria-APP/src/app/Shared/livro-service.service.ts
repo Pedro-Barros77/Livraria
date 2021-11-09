@@ -1,5 +1,5 @@
 import { DeleteModalComponent } from './../Components/delete-modal/delete-modal.component';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Livro } from './livro.model';
 import { Autor } from './autor.model';
@@ -12,10 +12,15 @@ import { Router } from '@angular/router';
 export class LivroServiceService {
 
   formData: Livro = new Livro();
+  formDataAutor: Autor = new Autor();
+  formDataFornecedor: Fornecedor = new Fornecedor();
+
+  fileData: FormData | null | undefined = new FormData();
 
   readonly baseURL = 'https://localhost:5000/api/Livro';
   readonly autorURL = 'https://localhost:5000/api/Autor';
   readonly fornecedorURL = 'https://localhost:5000/api/Fornecedor';
+  readonly imageURL = 'https://localhost:5000/uploads/';
 
   livrosList: Livro[] = [];
   autoresList: Autor[] = [];
@@ -24,15 +29,32 @@ export class LivroServiceService {
   constructor(
     private http: HttpClient,
     router: Router) {
-      this.router = router;
-    }
-    router: Router;
-  // this.formData.fileName = files[0].name.split('.')[0];
-  // this.formData.fileExt = "." + files[0].name.split('.')[1];
-  // this.formData.fileData = files[0].arrayBuffer();
+    this.router = router;
+  }
+  router: Router;
+
+  //LIVROS####################
+
+  refreshList() {
+    this.http.get(this.baseURL)
+      .toPromise()
+      .then(res => {
+        this.livrosList = res as Livro[];
+        this.filteredLivros = res as Livro[];
+
+        if (!this.router.url.toString().includes("client")) {
+          this.ReOrder();
+          this.ReOrder();
+        }
+      });
+  }
+
+  postImage(id: number) {
+    return this.http.post(this.baseURL + "/image/" + id, this.fileData);
+  }
 
   postLivro() {
-      return this.http.post(this.baseURL,this.formData);
+    return this.http.post(this.baseURL, this.formData);
   }
 
   putLivro() {
@@ -42,57 +64,77 @@ export class LivroServiceService {
     return this.http.delete(`${this.baseURL}/${id}`);
   }
 
-  refreshList() {
-    this.http.get(this.baseURL)
-      .toPromise()
-      .then(res => {
-        this.livrosList = res as Livro[];
-        this.filteredLivros = res as Livro[];
 
-        if(!this.router.url.toString().includes("client")){
-          this.ReOrder();
-          this.ReOrder();
-        }
-      });
-  }
+
+  //AUTORES###############
 
   refreshAutores() {
     this.http.get(this.autorURL)
       .toPromise()
       .then(res => {
         this.autoresList = res as Autor[];
+        this.filteredAutores = res as Autor[];
       });
   }
+
+  postAutor() {
+    return this.http.post(this.autorURL, this.formDataAutor);
+  }
+
+  putAutor() {
+    return this.http.put(`${this.autorURL}/${this.formDataAutor.id}`, this.formDataAutor);
+  }
+  deleteAutor(id: number) {
+    return this.http.delete(`${this.autorURL}/${id}`);
+  }
+
+
+
+
+
+  //FORNECEDORES###################
 
   refreshFornecedores() {
     this.http.get(this.fornecedorURL)
       .toPromise()
       .then(res => {
         this.fornecedoresList = res as Fornecedor[];
+        this.filteredFornecedores = res as Fornecedor[];
       });
   }
 
 
 
+
+
+
+
+
+
+
+  //Minhas funções____________
+
   getAutor(idLivro: number): any {
     let livro = this.livrosList.find(liv => liv.id == idLivro);
-    if(livro?.autorID != null){
+
+    if (livro?.autorID != null) {
       return this.autoresList.find(aut => aut.id == livro?.autorID)!;
     }
-    else{
+    else {
       return null;
     }
   }
 
   getFornecedor(idLivro: number): any {
     let livro = this.livrosList.find(liv => liv.id == idLivro);
-    if(livro?.autorID != null){
+    if (livro?.autorID != null) {
       return this.fornecedoresList.find(forn => forn.id == livro?.fornecedorID)!;
     }
-    else{
+    else {
       return null;
     }
   }
+
 
 
   //toLocaleString("pt-br",{style: "currency",currency: "BRL"})
@@ -101,9 +143,8 @@ export class LivroServiceService {
 
 
   public filteredLivros: Livro[] = this.livrosList;
-
-  public Autores: any = [];
-  public Fornecedores: any = [];
+  public filteredAutores: Autor[] = this.autoresList;
+  public filteredFornecedores: Fornecedor[] = this.fornecedoresList;
 
   private OrdemCrescente: boolean = true;
   private Alpha: boolean = true;
@@ -121,20 +162,28 @@ export class LivroServiceService {
       if (this.Alpha) {
         this.filteredLivros.sort((a: any, b: any) => a.titulo.localeCompare(b.titulo));
         document.querySelector("#ordemIcon")!.className = "fas fa-sort-alpha-down";
+
+        this.filteredAutores.sort((a: any, b: any) => a.nome.localeCompare(b.nome));
       }
       else {
         this.filteredLivros.sort((n1: any, n2: any) => n1.titulo.length - n2.titulo.length);
         document.querySelector("#ordemIcon")!.className = "fas fa-sort-amount-down-alt";
+
+        this.filteredAutores.sort((n1: any, n2: any) => n1.nome.length - n2.nome.length);
       }
     }
     else {
       if (this.Alpha) {
         this.filteredLivros.sort((a: any, b: any) => b.titulo.localeCompare(a.titulo));
         document.querySelector("#ordemIcon")!.className = "fas fa-sort-alpha-down-alt";
+
+        this.filteredAutores.sort((a: any, b: any) => b.nome.localeCompare(a.nome));
       }
       else {
         this.filteredLivros.sort((n1: any, n2: any) => n2.titulo.length - n1.titulo.length);
         document.querySelector("#ordemIcon")!.className = "fas fa-sort-amount-down";
+
+        this.filteredAutores.sort((n1: any, n2: any) => n2.nome.length - n1.nome.length);
       }
     }
   }
@@ -169,13 +218,29 @@ export class LivroServiceService {
 
       case "Autor":
         return this.livrosList.filter(
-          (livro: { id: number }) => this.getAutor(livro.id)?.nome.toLocaleLowerCase().indexOf(value) !== -1
+          (livro: { id: number }) => this.getAutor(livro.id)?.nome.toLocaleLowerCase()
+            .indexOf(value) !== -1 && this.getAutor(livro.id)?.nome.toLocaleLowerCase() != null
         )
         break;
 
       case "Fornecedor":
         return this.livrosList.filter(
-          (livro: { id: number }) => this.getFornecedor(livro.id)?.nome.toLocaleLowerCase().indexOf(value) !== -1
+          (livro: { id: number }) => this.getFornecedor(livro.id)?.nome.toLocaleLowerCase()
+            .indexOf(value) !== -1 && this.getFornecedor(livro.id)?.nome.toLocaleLowerCase() != null
+        )
+        break;
+
+      case "Nome do Autor":
+        return this.autoresList.filter(
+          (autor: { nome: string }) => autor?.nome.toLocaleLowerCase()
+            .indexOf(value) !== -1
+        )
+        break;
+
+        case "Nome do Fornecedor":
+        return this.fornecedoresList.filter(
+          (fornecedor: { nome: string }) => fornecedor?.nome.toLocaleLowerCase()
+            .indexOf(value) !== -1
         )
         break;
     }
