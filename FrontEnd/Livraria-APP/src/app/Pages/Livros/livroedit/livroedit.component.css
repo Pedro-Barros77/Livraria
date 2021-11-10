@@ -1,0 +1,31 @@
+#voltar{
+    margin-top:18px;
+    background-color: rgb(95, 95, 95);
+  }
+  #voltar i{
+    color: white;
+  }
+
+  #voltar:hover{
+    transition: 500ms;
+    background-color: black;
+    cursor: pointer;
+  }
+
+  .display-4{
+    position: absolute;
+    left: 50%;
+  }
+
+  hr{
+    position: relative;
+    width: 100%;
+  }
+
+  .invalid-feedback{
+    font-size: smaller;
+  }
+
+  #btnDeleteImg{
+    width: 100%;
+  }

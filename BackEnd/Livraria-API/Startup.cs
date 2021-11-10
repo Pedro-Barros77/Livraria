@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace Livraria_API
 {
@@ -31,7 +33,15 @@ namespace Livraria_API
             services.AddDbContext<LivrariaContext>(
                 context => context.UseSqlServer(Configuration.GetConnectionString("default"))
             );
+
+            services.AddControllersWithViews();
+
             services.AddControllers();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddCors();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Livraria_API", Version = "v1" });
@@ -50,9 +60,21 @@ namespace Livraria_API
 
             app.UseHttpsRedirection();
 
+            var cultures = new []{"pt-BR"};
+            app.UseRequestLocalization(new RequestLocalizationOptions()
+                .SetDefaultCulture(cultures[0])
+                .AddSupportedCultures(cultures)
+            );
+
+            app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors(x => x.AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowAnyOrigin());
 
             app.UseEndpoints(endpoints =>
             {

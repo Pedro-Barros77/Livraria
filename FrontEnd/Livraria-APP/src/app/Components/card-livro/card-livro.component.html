@@ -1,0 +1,8 @@
+<div class="card">
+    <img src="{{images[imageID]}}" alt="img">
+  <div class="body translate-middle-x">
+    <h5 class="card-title">{{Livro.titulo}}</h5>
+    <p class="card-text">{{Livro.valor.toLocaleString("pt-br",{style: "currency",currency: "BRL"})}}</p>
+    <p class="card-text">{{service.getAutor(Livro.id)?.nome}}</p>
+  </div>
+</div>

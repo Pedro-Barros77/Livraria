@@ -1,0 +1,54 @@
+<div class="container" style="margin-top: 20px;">
+
+  <div class="row justify-content-lg-center">
+    <div class="col col-lg-1">
+      <button (click)="resetForm(this.form)" id="voltarAutor" class="btn btn-light" routerLink="/autores-list" type="button">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+    </div>
+    <div class="col col-lg-7 text-center">
+      <p class="display-4 translate-middle-x">Novo Autor</p>
+    </div>
+  </div>
+
+  <div class="row justify-content-lg-center">
+    <div class="col col-lg-8">
+      <hr />
+    </div>
+  </div>
+
+  <form class="was-validated" method="post" novalidate autocomplete="off" #form="ngForm" (submit)="onSubmit(form)">
+
+    <div class="row justify-content-lg-center">
+
+      <div class="row justify-content-center">
+
+        <div class="col-md-12 col-lg-8">
+          <div class="text-danger"></div>
+
+          <div class="form-group">
+            <label class="control-label">Nome</label>
+            <!-- Caixa de texto TITULO-->
+            <input class="form-control" maxlength="30" placeholder="Nome" name="nome" id="txtNome" value="Nome"
+              #nome="ngModel" [(ngModel)]="service.formDataAutor.nome" required
+              [class.invalid]="nome.invalid && nome.touched" />
+
+            <span class="text-danger invalid-feedback">Campo Nome obrigatório.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-lg-center">
+        <div class="col-12 col-md-8">
+          <div class="form-group">
+            <br />
+            <button id="callModal" style="display: none;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#duplicateModal" type="button"></button>
+            <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Salvar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<duplicate-modal (confirm)="confirmCreate()"></duplicate-modal>

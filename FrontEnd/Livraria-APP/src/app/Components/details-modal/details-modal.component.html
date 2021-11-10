@@ -1,0 +1,144 @@
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+  <div id="modalDetailsDialog" class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Visualizar detalhes</h5>
+        <button (click)="resetar()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="detailsModalLabel" class="modal-body">
+
+        <div *ngIf="origin == 'livros'">
+          <!-- ######################## -->
+          <div class="row justify-content-center">
+            <div class="row">
+
+              <div class="col-auto">
+                <img id="imgPlaceholder" src="" alt="Img">
+              </div>
+
+              <div class="col">
+                <div class="row itemLinha">
+
+                  <div class="col">
+                    <div class="row">
+                      <div class="col-auto">
+                        <h5>Título:</h5>
+                      </div>
+                      <div class="col-auto">
+                        <p>{{service.formData.titulo}}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="row itemLinha">
+
+                  <div class="col">
+                    <div class="row">
+                      <div class="col-auto">
+                        <h5>Valor:</h5>
+                      </div>
+                      <div class="col-auto">
+                        {{service.formData.valor}}
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="row itemLinha">
+
+                  <div class="col">
+                    <div class="row">
+                      <div class="col-auto">
+                        <h5>Autor:</h5>
+                      </div>
+                      <div class="col-auto">
+                        {{service.getAutor(service.formData.id)?.nome}}
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="row itemLinha">
+
+                  <div class="col">
+                    <div class="row">
+                      <div class="col-auto">
+                        <h5>Fornecedor:</h5>
+                      </div>
+                      <div class="col-auto">
+                        {{service.getFornecedor(service.formData.id)?.nome}}
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ######################## -->
+        </div>
+
+        <div *ngIf="origin == 'autores'">
+          <!-- ######################## -->
+          <div class="row justify-content-center">
+
+            <div class="col">
+              <div class="row itemLinha">
+
+                <div class="col">
+                  <div class="row">
+                    <div class="col-auto">
+                      <h5>Nome:</h5>
+                    </div>
+                    <div class="col-auto">
+                      <p>{{service.formDataAutor.nome}}</p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row itemLinha">
+
+                <div class="col">
+                  <div class="row">
+                    <div class="col-auto">
+                      <!-- <h5>Livros ({{service.getLivros(service.formDataAutor.id).length}}):</h5> -->
+                    </div>
+                    <div class="col-auto">
+                      <!-- {{service.formData.valor}} -->
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+        <!-- ######################## -->
+      </div>
+
+      <div class="modal-footer">
+        <!-- <button (click)="list.modalDeleteSingle(livro!)" data-bs-dismiss="modal" data-bs-toggle="modal"
+              data-bs-target="#deleteModal" type="button" class="btn btn-outline-danger btnAction">
+              Excluir</button> -->
+        <button *ngIf="origin =='livros'" data-bs-dismiss="modal" type="button" class="btn btn-outline-secondary btnBlackHover"
+          [routerLink]="['/livros-edit']"> <i class="fas fa-pen"></i> Editar</button>
+
+          <button *ngIf="origin =='autores'" data-bs-dismiss="modal" type="button" class="btn btn-outline-secondary btnBlackHover"
+          [routerLink]="['/autores-edit']"> <i class="fas fa-pen"></i> Editar</button>
+
+          <button *ngIf="origin =='fornecedores'" data-bs-dismiss="modal" type="button" class="btn btn-outline-secondary btnBlackHover"
+          [routerLink]="['/fornecedores-edit']"> <i class="fas fa-pen"></i> Editar</button>
+
+        <button (click)="resetar()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>

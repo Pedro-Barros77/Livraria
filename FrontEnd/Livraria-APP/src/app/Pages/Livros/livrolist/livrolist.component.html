@@ -1,0 +1,173 @@
+<div class="container">
+  <div class="row align-items-center">
+
+    <div class="col-auto">
+      <p class="display-1">Livros</p>
+    </div>
+
+    <div class="col-auto">
+      <button type="button" class="btn btn-success" routerLink="/livros-create">
+        <i class="fas fa-plus"></i><span style="margin-left: 10px;">Novo Livro</span>
+      </button>
+    </div>
+
+    <!-- COMENTAR ESTA DIV NA APRESENTAÇÃO -->
+    <div class="col-auto">
+      <button (click)="postTests()" type="button" class="btn btn-warning">
+        <i class="fas fa-plus"></i><span style="margin-left: 10px;">Cadastrar 10 Testes</span>
+      </button>
+    </div>
+
+  </div>
+
+  <div class="form-inline">
+    <div class="row">
+
+      <div class="col col-sm-12 col-md-7 col-lg-4">
+        <div class="form-group mb-2">
+          <input type="text" class="form-control mr-2" placeholder="{{service.FilterType}}"
+            [(ngModel)]="service.SearchFilter">
+        </div>
+      </div>
+
+      <div class="col col-sm-8 col-md-2 col-lg-2">
+        <div class="dropdown">
+          <button class="btn btn-light dropdown-toggle btnWhite" type="button" id="dpdFiltro" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <i class="fas fa-filter"></i> {{service.FilterType}}
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dpdFiltro">
+            <li><a class="dropdown-item" (click)="service.FilterType = 'Titulo'">Titulo</a></li>
+            <li><a class="dropdown-item" (click)="service.FilterType = 'Autor'">Autor</a></li>
+            <li><a class="dropdown-item" (click)="service.FilterType = 'Fornecedor'">Fornecedor</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col col-sm-4 col-md-3 col-lg-2">
+        <div class="btn-group" style="width: 100%;">
+          <button (click)="service.ReOrder()" id="btnOrdem" type="button" class="btn btn-light btnWhite">
+            <i id="ordemIcon" class="fas fa-sort-alpha-down"></i>
+            Ordenar
+          </button>
+          <button type="button" class="btn btn-light btnWhite dropdown-toggle dropdown-toggle-split" id="dpdOrdem"
+            data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
+            <span class="visually-hidden">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dpdOrdem">
+            <li><a class="dropdown-item" (click)="service.setOrdem(true)">Alfabética</a></li>
+            <li><a class="dropdown-item" (click)="service.setOrdem(false)">Crescente/Decrescente</a></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <table id="tabela" class="table table-striped table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th class="col-auto">
+          <div class="row noGap align-items-center">
+            <div class="col-auto noGap">
+              <button id="btnSelecionar" (click)="startSelection()" type="button"
+                class="btn btn-light">Selecionar</button>
+            </div>
+
+            <div *ngIf="selecting" class="col-auto noGap">
+              <div class="dropdown">
+                <button id="selectionOptions" class="btn btn-dark" type="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <i class="fas fa-ellipsis-h fa-lg"></i>
+                </button>
+                <ul class="dropdown-menu slcOptions" aria-labelledby="selectionOptions">
+                  <li><a (click)="selectAll()" class="dropdown-item">Selecionar tudo</a></li>
+                  <li><a id="deleteSelected" (click)="modalDeleteMultiple(getSelectedIds())"
+                      class="dropdown-item disabled">Excluir selecionados</a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li><a (click)="cancelSelection()" class="dropdown-item">Cancelar seleção</a></li>
+                </ul>
+                <button id="callDeleteModal" style="display: none;" data-bs-toggle="modal"
+                  data-bs-target="#deleteModal"></button>
+              </div>
+
+            </div>
+          </div>
+        </th>
+        <th class="col-1">
+          <p>Imagem</p>
+        </th>
+        <th class="col">
+          <p>Titulo</p>
+        </th>
+        <th class="col-1">
+          <p>Valor</p>
+        </th>
+        <th class="col-2">
+          <p>Autor</p>
+        </th>
+        <th class="col-2">
+          <p>Fornecedor</p>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody *ngIf="service.livrosList && service.livrosList.length" class="table-light">
+
+      <tr *ngFor="let livro of service.filteredLivros; index as i;">
+        <td>
+          <button *ngIf="!selecting" type="button" class="btn btn-outline-secondary btnAction"
+            [routerLink]="['/livros-edit']" (click)="populateForm(livro)">
+            <i class="fas fa-pen"></i>
+          </button>
+          <button *ngIf="!selecting" type="button" class="btn btn-outline-primary btnAction" (click)="openDetails(livro)"
+            data-bs-toggle="modal" data-bs-target="#detailsModal">
+            <i class="fas fa-search"></i>
+          </button>
+          <button *ngIf="!selecting" (click)="modalDeleteSingle(livro)" data-bs-toggle="modal"
+            data-bs-target="#deleteModal" type="button" class="btn btn-outline-danger btnAction">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+
+          <div *ngIf="selecting">
+            <input (click)="setExcludeBtn()" class="form-check-input ckbSelect" type="checkbox" value="{{livro.id}}"
+              aria-label="...">
+          </div>
+
+        </td>
+        <td class="text-center">
+          <div>
+            <img id="img-{{livro.id}}" (mouseenter)="hoverImg(livro.id)" (mouseleave)="blurImg(livro.id)"
+              *ngIf="livro.imageExt != null && livro.imageExt.length > 1; else ifNoImage" class="livroImg"
+              src="{{service.imageURL + livro.id + livro.imageExt}}" alt="Img">
+            <ng-template #ifNoImage>img</ng-template>
+          </div>
+        </td>
+        <td>{{livro.titulo}}</td>
+        <td>{{valorEmReais(livro.valor.toString())}}</td>
+        <td>{{service.getAutor(livro.id)?.nome}}</td>
+        <td>{{service.getFornecedor(livro.id)?.nome}}</td>
+      </tr>
+    </tbody>
+
+    <tfoot class="table-light">
+      <tr *ngIf="!service.livrosList.length">
+        <td colspan="8">
+          <h6>Nenhum livro cadastrado.</h6>
+        </td>
+      </tr>
+      <tr *ngIf="!service.filteredLivros.length">
+        <td colspan="8">
+          Nenhum livro com o <strong>{{service.FilterType}}</strong> informado.
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <delete-modal (delete)="confirmDelete($event)"></delete-modal>
+  <details-modal [origin]="'livros'"></details-modal>
+
+</div>

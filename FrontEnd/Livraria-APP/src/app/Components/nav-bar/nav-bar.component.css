@@ -1,0 +1,31 @@
+.navbar{
+
+}
+
+.navIcon{
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+
+.nav-link{
+  margin: 0;
+  padding: 0;
+}
+
+.navItemContainer{
+  color: rgb(95, 95, 95);
+  padding: 0;
+  margin: 0;
+}
+
+.navItemContainer:hover{
+  transition: 500ms;
+  color: black;
+  cursor: pointer;
+}
+
+.navItemContainer:hover .nav-link{
+  color: black;
+  cursor: pointer;
+}

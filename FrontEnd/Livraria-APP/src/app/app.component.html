@@ -1,12 +1,9 @@
-Nosso site agora vaaaaaaai
-<div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-    Dropdown
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-    <li><a class="dropdown-item" href="#">Bootstrap no jeito</a></li>
-    <li><a class="dropdown-item" href="#">Javascript funfando</a></li>
-    <li><a class="dropdown-item" href="#">Já subi no git</a></li>
-  </ul>
-</div>
+<ng-container *ngIf="!isHomePage(); else elseBlock">
+  <nav-bar></nav-bar>
+</ng-container>
+
+<ng-template #elseBlock>
+  <client-nav-bar></client-nav-bar>
+</ng-template>
+
 <router-outlet></router-outlet>

@@ -1,0 +1,111 @@
+<div class="container" style="margin-top: 20px;">
+
+  <div class="row justify-content-lg-center">
+    <div class="col col-lg-1">
+      <button (click)="resetForm(this.form)" id="voltar" class="btn btn-light" routerLink="/livros-list" type="button">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+    </div>
+    <div class="col col-lg-7 text-center">
+      <p class="display-4 translate-middle-x">Novo Livro</p>
+    </div>
+  </div>
+
+  <div class="row justify-content-lg-center">
+    <div class="col col-lg-8">
+      <hr />
+    </div>
+  </div>
+
+  <form class="was-validated" method="post" novalidate autocomplete="off" #form="ngForm" (submit)="onSubmit(form)">
+
+    
+      <div class="row justify-content-center">
+
+        <div class="col-md-10 col-lg-6">
+          <div class="text-danger"></div>
+
+          <div class="form-group">
+            <label class="control-label">Título</label>
+            <!-- Caixa de texto TITULO-->
+            <input class="form-control" maxlength="50" placeholder="Titulo" name="titulo" id="txtTitulo" value="titulo"
+              #titulo="ngModel" [(ngModel)]="service.formData.titulo" required
+              [class.invalid]="titulo.invalid && titulo.touched" />
+
+            <span class="text-danger invalid-feedback">Campo Título obrigatório.</span>
+          </div>
+        </div>
+
+        <div class="col-md-2 col-lg-2">
+          <div class="form-group">
+            <label class="control-label">Valor</label>
+            <!-- Caixa de texto VALOR-->
+            <input class="form-control txtCurrency" placeholder="Valor" name="valor" id="txtValor" value="valor"
+              #valor="ngModel" [(ngModel)]="service.formData.valor" required
+              [class.invalid]="valor.invalid && valor.touched" />
+            <span class="text-danger invalid-feedback">Campo Valor obrigatório.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+
+          <div class="form-group">
+            <label class="control-label">Autor</label>
+            <!-- ComboBox Autor -->
+            <select class="form-select" aria-label="Autor" name="autorID" id="cmbAutor" #autorID="ngModel"
+              [(ngModel)]="service.formData.autorID" [class.invalid]="autorID.invalid && autorID.touched">
+
+              <option value="0">Nenhum selecionado</option>
+              <option *ngFor="let autor of service.autoresList" value="{{autor.id}}">{{autor.nome}}</option>
+            </select>
+
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+
+          <div class="form-group">
+            <label class="control-label">Fornecedor</label>
+            <!-- Caixa de texto FORNECEDOR-->
+            <select class="form-select" aria-label="Fornecedor" name="fornecedorID" id="cmbFornecedor"
+              #fornecedorID="ngModel" [(ngModel)]="service.formData.fornecedorID"
+              [class.invalid]="fornecedorID.invalid && fornecedorID.touched">
+
+              <option value="0">Nenhum selecionado</option>
+              <option *ngFor="let fornecedor of service.fornecedoresList" value="{{fornecedor.id}}">{{fornecedor.nome}}
+              </option>
+            </select>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+
+        <div class="col-md-12 col-lg-8">
+
+          <div class="form-group">
+            <label for="formFile" class="form-label">Enviar Imagem</label>
+            <input (change)="selectFile($event)" class="form-control custom-file-input" type="file" id="formFile">
+          </div>
+
+        </div>
+      </div>
+
+      <div class="row justify-content-lg-center">
+        <div class="col-12 col-md-8">
+          <div class="form-group">
+            <br />
+            <button id="callModal" style="display: none;" class="btn btn-primary" 
+            data-bs-toggle="modal" data-bs-target="#duplicateModal" type="button"></button>
+            <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Salvar</button>
+          </div>
+        </div>
+      </div>
+    
+  </form>
+</div>
+
+<duplicate-modal (confirm)="confirmCreate()"></duplicate-modal>

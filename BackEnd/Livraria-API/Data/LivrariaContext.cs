@@ -10,6 +10,7 @@ namespace Livraria_API.Data
         
         public DbSet<Livro> Livros {get;set;}
         public DbSet<Autor> Autores {get;set;}
+        public DbSet<Fornecedor> Fornecedores {get;set;}
         public DbSet<Venda> Vendas {get;set;}
         public DbSet<ItemVenda> ItemVendas {get;set;}
         public DbSet<Estoque> Estoques {get;set;}
