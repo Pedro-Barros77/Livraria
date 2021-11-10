@@ -1,27 +1,27 @@
-#voltarAutor{
-  margin-top:18px;
+#voltarFornecedor {
+  margin-top: 18px;
   background-color: rgb(95, 95, 95);
 }
-#voltarAutor i{
+#voltarFornecedor i {
   color: white;
 }
 
-#voltarAutor:hover{
+#voltarFornecedor:hover {
   transition: 500ms;
   background-color: black;
   cursor: pointer;
 }
 
-.display-4{
+.display-4 {
   position: absolute;
   left: 50%;
 }
 
-hr{
+hr {
   position: relative;
   width: 100%;
 }
 
-.invalid-feedback{
+.invalid-feedback {
   font-size: smaller;
 }

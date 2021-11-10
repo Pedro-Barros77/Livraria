@@ -41,12 +41,6 @@ namespace Livraria_API.Controllers
             return await _context.Livros.ToListAsync();
         }
 
-        [HttpGet("produtos")]
-        public async Task<ActionResult<IEnumerable<Livro>>> GetProdutos()
-        {
-            return await _context.Livros.ToListAsync();
-        }
-
         [HttpGet("{id}")]
         public async Task<ActionResult<Livro>> GetLivro(int id)
         {

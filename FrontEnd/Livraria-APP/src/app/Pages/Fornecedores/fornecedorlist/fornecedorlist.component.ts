@@ -21,6 +21,7 @@ export class FornecedorlistComponent implements OnInit {
     this.service.refreshList();
     this.service.refreshAutores();
     this.service.refreshFornecedores();
+    this.service.FilterType = "Nome do Fornecedor";
   }
 
   populateForm(selectedRecord: Fornecedor) {
@@ -28,15 +29,15 @@ export class FornecedorlistComponent implements OnInit {
   }
 
   modalDeleteSingle(fornecedor: Fornecedor) {
-    //let delModal: DeleteModalComponent = new DeleteModalComponent(this, this.service);
-    //delModal.setAutor(autor);
+    let delModal: DeleteModalComponent = new DeleteModalComponent(this.service);
+    delModal.setFornecedor(fornecedor);
   }
 
   modalDeleteMultiple(ids: number[]) {
     if (ids.length > 0) {
-      //let delModal: DeleteModalComponent = new DeleteModalComponent(this, this.service);
-      //delModal.setIds(ids);
-      //(<HTMLButtonElement>document.getElementById("Autor")).click();
+      let delModal: DeleteModalComponent = new DeleteModalComponent(this.service);
+      delModal.setIdFornecedores(ids);
+      (<HTMLButtonElement>document.getElementById("callDeleteModal")).click();
     }
   }
 
@@ -102,5 +103,46 @@ export class FornecedorlistComponent implements OnInit {
       IDs.push(id);
     });
     return IDs;
+  }
+  
+  confirmDelete(res: DeleteResponse){
+    if(res.origin != "fornecedor"){
+      return;
+    }
+
+    if(res.ids.length > 1){
+      this.deleteFornecedores(res.ids);
+    }
+    else{
+      this.deleteFornecedor(res.ids[0]);
+    }
+
+    this.cancelSelection();
+  }
+
+  deleteFornecedor(id: number) {
+    this.service.deleteFornecedor(id).subscribe(
+      response => this.service.refreshFornecedores()
+    );
+  }
+
+  deleteFornecedores(ids: number[]) {
+    let i: number = 0;
+    ids.forEach(id => {
+      this.service.deleteFornecedor(id).subscribe(
+        response =>{
+          if(i == ids.length-1){this.service.refreshFornecedores();}
+          i++;
+        }
+      );
+    });
+  }
+}
+class DeleteResponse{
+  ids: number[];
+  origin: string;
+  constructor(ids: number[], origin: string){
+    this.ids = ids;
+    this.origin = origin;
   }
 }

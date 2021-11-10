@@ -19,8 +19,7 @@
 
   <form class="was-validated" method="post" novalidate autocomplete="off" #form="ngForm" (submit)="onSubmit(form)">
 
-    <div class="row justify-content-lg-center">
-
+    
       <div class="row justify-content-center">
 
         <div class="col-md-10 col-lg-6">
@@ -29,7 +28,7 @@
           <div class="form-group">
             <label class="control-label">Título</label>
             <!-- Caixa de texto TITULO-->
-            <input class="form-control" placeholder="Titulo" name="titulo" id="txtTitulo" value="titulo"
+            <input class="form-control" maxlength="50" placeholder="Titulo" name="titulo" id="txtTitulo" value="titulo"
               #titulo="ngModel" [(ngModel)]="service.formData.titulo" required
               [class.invalid]="titulo.invalid && titulo.touched" />
 
@@ -99,13 +98,14 @@
         <div class="col-12 col-md-8">
           <div class="form-group">
             <br />
-            <button id="callModal" style="display: none;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#duplicateModal" type="button"></button>
+            <button id="callModal" style="display: none;" class="btn btn-primary" 
+            data-bs-toggle="modal" data-bs-target="#duplicateModal" type="button"></button>
             <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Salvar</button>
           </div>
         </div>
       </div>
-    </div>
+    
   </form>
 </div>
 
-<duplicate-modal></duplicate-modal>
+<duplicate-modal (confirm)="confirmCreate()"></duplicate-modal>

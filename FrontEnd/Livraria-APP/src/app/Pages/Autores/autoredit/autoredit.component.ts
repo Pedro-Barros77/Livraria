@@ -6,11 +6,11 @@ import { Autor } from 'src/app/Shared/autor.model';
 import { LivroServiceService } from 'src/app/Shared/livro-service.service';
 
 @Component({
-  selector: 'autores-create',
-  templateUrl: './autorcreate.component.html',
-  styleUrls: ['./autorcreate.component.css']
+  selector: 'app-autoredit',
+  templateUrl: './autoredit.component.html',
+  styleUrls: ['./autoredit.component.css']
 })
-export class AutorcreateComponent implements OnInit {
+export class AutoreditComponent implements OnInit {
 
   constructor(
     service: LivroServiceService,
@@ -40,25 +40,23 @@ export class AutorcreateComponent implements OnInit {
       btnModal.click();
     }
     else {
-      this.confirmCreate();
+      this.confirmUpdate();
     }
   }
 
-  confirmCreate() {
+  confirmUpdate() {
     this.setUpperCase();
 
-    this.service.formDataAutor.id = 0;
-
-    this.insertRecord(this.thisForm!);
+    this.updateRecord(this.thisForm!);
   }
 
-  insertRecord(form: NgForm) {
-
-    this.service.postAutor().subscribe(
+  updateRecord(form: NgForm) {
+    this.service.putAutor().subscribe(
       response => {
-        this.resetForm(form);
+        let id = this.service.formData.id;
 
-        this.router.navigate(["/autores-list"]);
+        this.resetForm(form);
+        this.router.navigate(["/autores-list"])
       },
       err => { console.log(err); }
     );
@@ -109,7 +107,7 @@ export class AutorcreateComponent implements OnInit {
 
         //Armazena o livro encontrado com ao menos uma palavra repetida
         let autoresEncontrados: Autor[] = this.service.autoresList.filter(
-          aut => aut.nome.toLocaleLowerCase().includes(palavra));
+          autor => autor.nome.toLocaleLowerCase().includes(palavra));
 
         //Para cada livro com ao menos uma palavra repetida
         autoresEncontrados.forEach(aut => {
@@ -127,9 +125,10 @@ export class AutorcreateComponent implements OnInit {
             }
           });
 
+
           //Se o número de palavras repetidas deste livro >= 50%
           //do número de palavras do livro cadastrado
-          if (duplicatas >= autPalavras.length / 2 && !autoresRepetidos.includes(aut)) {
+          if (duplicatas >= autPalavras.length / 2 && !autoresRepetidos.includes(aut) && aut.id != this.service.formDataAutor.id) {
             autoresRepetidos.push(aut);
           }
         });
@@ -147,4 +146,5 @@ export class AutorcreateComponent implements OnInit {
       return [];
     }
   }
+
 }

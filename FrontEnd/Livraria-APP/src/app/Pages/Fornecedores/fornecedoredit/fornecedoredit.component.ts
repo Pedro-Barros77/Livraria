@@ -3,14 +3,15 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DuplicateModalComponent } from 'src/app/Components/duplicate-modal/duplicate-modal.component';
 import { Autor } from 'src/app/Shared/autor.model';
+import { Fornecedor } from 'src/app/Shared/fornecedor.model';
 import { LivroServiceService } from 'src/app/Shared/livro-service.service';
 
 @Component({
-  selector: 'autores-create',
-  templateUrl: './autorcreate.component.html',
-  styleUrls: ['./autorcreate.component.css']
+  selector: 'fornecedores-edit',
+  templateUrl: './fornecedoredit.component.html',
+  styleUrls: ['./fornecedoredit.component.css']
 })
-export class AutorcreateComponent implements OnInit {
+export class FornecedoreditComponent implements OnInit {
 
   constructor(
     service: LivroServiceService,
@@ -40,25 +41,23 @@ export class AutorcreateComponent implements OnInit {
       btnModal.click();
     }
     else {
-      this.confirmCreate();
+      this.confirmUpdate();
     }
   }
 
-  confirmCreate() {
+  confirmUpdate() {
     this.setUpperCase();
 
-    this.service.formDataAutor.id = 0;
-
-    this.insertRecord(this.thisForm!);
+    this.updateRecord(this.thisForm!);
   }
 
-  insertRecord(form: NgForm) {
-
-    this.service.postAutor().subscribe(
+  updateRecord(form: NgForm) {
+    this.service.putFornecedor().subscribe(
       response => {
-        this.resetForm(form);
+        let id = this.service.formDataFornecedor.id;
 
-        this.router.navigate(["/autores-list"]);
+        this.resetForm(form);
+        this.router.navigate(["/fornecedores-list"])
       },
       err => { console.log(err); }
     );
@@ -66,7 +65,7 @@ export class AutorcreateComponent implements OnInit {
 
   resetForm(form: NgForm) {
     form.form.reset();
-    this.service.formDataAutor = new Autor();
+    this.service.formDataFornecedor = new Fornecedor();
   }
 
   setUpperCase() {
@@ -87,13 +86,13 @@ export class AutorcreateComponent implements OnInit {
       novoNome += novaPalavra;
     });
 
-    this.service.formDataAutor.nome = novoNome;
+    this.service.formDataFornecedor.nome = novoNome;
   }
 
   getDuplicates(form: NgForm): Autor[] {
     let hasDuplicate: boolean = false;
     //Variável que receberá os livros com mais de 49% de duplicatas
-    let autoresRepetidos: Autor[] = [];
+    let fornecedoresRepetidos: Autor[] = [];
 
     let palavras: string[] = Array.from(form.controls["nome"].value.toString().toLocaleLowerCase().split(" ").filter(
       (p: string) => p.length >= 3
@@ -103,48 +102,87 @@ export class AutorcreateComponent implements OnInit {
     palavras.forEach(palavra => {
 
       //Se houver um livro que inclua a palavra atual
-      if (this.service.autoresList.some(aut =>
-        aut.nome.toLocaleLowerCase().includes(
+      if (this.service.fornecedoresList.some(forn =>
+        forn.nome.toLocaleLowerCase().includes(
           palavra.toLocaleLowerCase()))) {
 
         //Armazena o livro encontrado com ao menos uma palavra repetida
-        let autoresEncontrados: Autor[] = this.service.autoresList.filter(
-          aut => aut.nome.toLocaleLowerCase().includes(palavra));
+        let fornecedoresEncontrados: Autor[] = this.service.fornecedoresList.filter(
+          fornecedor => fornecedor.nome.toLocaleLowerCase().includes(palavra));
 
         //Para cada livro com ao menos uma palavra repetida
-        autoresEncontrados.forEach(aut => {
+        fornecedoresEncontrados.forEach(forn => {
           let duplicatas: number = 0;
 
-          let autPalavras: string[] = aut.nome.toLocaleLowerCase().split(" ").filter(
+          let fornPalavras: string[] = forn.nome.toLocaleLowerCase().split(" ").filter(
             (p: string) => p.length >= 3
           );
 
           //Para cada palavra deste livro
-          autPalavras.forEach(autPalavra => {
+          fornPalavras.forEach(fornPalavra => {
             //Se existe essa palavra no array de palavras
-            if (palavras.includes(autPalavra)) {
+            if (palavras.includes(fornPalavra)) {
               duplicatas++;
             }
           });
 
+
           //Se o número de palavras repetidas deste livro >= 50%
           //do número de palavras do livro cadastrado
-          if (duplicatas >= autPalavras.length / 2 && !autoresRepetidos.includes(aut)) {
-            autoresRepetidos.push(aut);
+          if (duplicatas >= fornPalavras.length / 2 && !fornecedoresRepetidos.includes(forn) && forn.id != this.service.formDataFornecedor.id) {
+            fornecedoresRepetidos.push(forn);
           }
         });
 
-        if (autoresRepetidos.length > 0) {
+        if (fornecedoresRepetidos.length > 0) {
           hasDuplicate = true;
         }
       }
     });
 
     if (hasDuplicate) {
-      return autoresRepetidos;
+      return fornecedoresRepetidos;
     }
     else {
       return [];
     }
   }
+
+  lastLength: number = 0;
+
+  public set tel(value: any) {
+    this.service.formDataFornecedor.telefone = value;
+    let txtTel = document.getElementById("txtTelefone") as HTMLInputElement;
+
+    if(txtTel.value.length < this.lastLength){
+      txtTel.value = '';
+      this.lastLength = 0;
+      return;
+    }
+    
+    let chars = ['(',')','-',' '];
+    let newString = '';
+    
+    Array.from(txtTel.value.toString()).forEach(letra => {
+      if(!chars.includes(letra)){
+        newString += letra;
+      }
+    });
+    
+    if(newString.length == 2 && !txtTel.value.toString().includes('(')){
+      txtTel.value = "(" + newString + ") ";
+    }
+    
+    if(newString.length == 6){
+      txtTel.value += "-";
+    }
+
+    if(newString.length == 11){
+      let splitTel: string[] = txtTel.value.split('-');
+      txtTel.value = splitTel[0] + splitTel[1][0] + '-' + splitTel[1].substr(1);
+    }
+
+    this.lastLength = txtTel.value.length;
+  }
+
 }

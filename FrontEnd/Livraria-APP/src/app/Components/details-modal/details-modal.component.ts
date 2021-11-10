@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { LivroListComponent } from 'src/app/Pages/Livros/livrolist/livrolist.component';
+import { Component, Input, OnInit } from '@angular/core';
+import { Autor } from 'src/app/Shared/autor.model';
+import { Fornecedor } from 'src/app/Shared/fornecedor.model';
 import { LivroServiceService } from 'src/app/Shared/livro-service.service';
 import { Livro } from 'src/app/Shared/livro.model';
 
@@ -10,12 +11,12 @@ import { Livro } from 'src/app/Shared/livro.model';
 })
 export class DetailsModalComponent implements OnInit {
 
-  constructor(list: LivroListComponent, service: LivroServiceService) {
-    this.list = list;
+  constructor(service: LivroServiceService) {
     this.service = service;
   }
 
-  public list: LivroListComponent;
+  @Input() origin: any;
+
   public service: LivroServiceService;
 
   public livro: Livro | undefined;
@@ -23,16 +24,15 @@ export class DetailsModalComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  populateForm(selectedRecord: Livro) {
-    this.service.formData = Object.assign({}, selectedRecord);
-  }
-
-  setImage(){
+  setLivro() {
+    document.getElementById("modalDetailsDialog")!.classList.add("modal-lg");
     document.getElementById("imgPlaceholder")!.setAttribute("src",
-    this.service.imageURL + this.service.formData.id + this.service.formData.imageExt);
+      this.service.imageURL + this.service.formData.id + this.service.formData.imageExt);
   }
 
-  resetar(){
+  resetar() {
     this.service.formData = new Livro();
+    this.service.formDataAutor = new Autor();
+    this.service.formDataFornecedor = new Fornecedor();
   }
 }

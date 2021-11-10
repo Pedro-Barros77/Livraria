@@ -103,7 +103,16 @@ export class LivroServiceService {
       });
   }
 
+  postFornecedor() {
+    return this.http.post(this.fornecedorURL, this.formDataFornecedor);
+  }
 
+  putFornecedor() {
+    return this.http.put(`${this.fornecedorURL}/${this.formDataFornecedor.id}`, this.formDataFornecedor);
+  }
+  deleteFornecedor(id: number) {
+    return this.http.delete(`${this.fornecedorURL}/${id}`);
+  }
 
 
 
@@ -135,6 +144,10 @@ export class LivroServiceService {
     }
   }
 
+  getLivros(idAutor: number): any {
+    return this.livrosList.find(liv => liv.autorID == idAutor)!;
+  }
+
 
 
   //toLocaleString("pt-br",{style: "currency",currency: "BRL"})
@@ -164,12 +177,14 @@ export class LivroServiceService {
         document.querySelector("#ordemIcon")!.className = "fas fa-sort-alpha-down";
 
         this.filteredAutores.sort((a: any, b: any) => a.nome.localeCompare(b.nome));
+        this.filteredFornecedores.sort((a: any, b: any) => a.nome.localeCompare(b.nome));
       }
       else {
         this.filteredLivros.sort((n1: any, n2: any) => n1.titulo.length - n2.titulo.length);
         document.querySelector("#ordemIcon")!.className = "fas fa-sort-amount-down-alt";
 
         this.filteredAutores.sort((n1: any, n2: any) => n1.nome.length - n2.nome.length);
+        this.filteredFornecedores.sort((n1: any, n2: any) => n1.nome.localeCompare(n2.nome));
       }
     }
     else {
@@ -178,12 +193,14 @@ export class LivroServiceService {
         document.querySelector("#ordemIcon")!.className = "fas fa-sort-alpha-down-alt";
 
         this.filteredAutores.sort((a: any, b: any) => b.nome.localeCompare(a.nome));
+        this.filteredFornecedores.sort((a: any, b: any) => b.nome.localeCompare(a.nome));
       }
       else {
         this.filteredLivros.sort((n1: any, n2: any) => n2.titulo.length - n1.titulo.length);
         document.querySelector("#ordemIcon")!.className = "fas fa-sort-amount-down";
 
         this.filteredAutores.sort((n1: any, n2: any) => n2.nome.length - n1.nome.length);
+        this.filteredFornecedores.sort((n1: any, n2: any) => n2.nome.length - n1.nome.length);
       }
     }
   }
@@ -205,6 +222,8 @@ export class LivroServiceService {
   public set SearchFilter(value: string) {
     this._SearchFilter = value;
     this.filteredLivros = this.SearchFilter ? this.FiltrarLivros(this.SearchFilter) : this.livrosList;
+    this.filteredAutores = this.SearchFilter ? this.FiltrarLivros(this.SearchFilter) : this.autoresList;
+    this.filteredFornecedores = this.SearchFilter ? this.FiltrarLivros(this.SearchFilter) : this.fornecedoresList;
   }
   FiltrarLivros(value: string): any {
     value = value.toLocaleLowerCase();
@@ -237,7 +256,7 @@ export class LivroServiceService {
         )
         break;
 
-        case "Nome do Fornecedor":
+      case "Nome do Fornecedor":
         return this.fornecedoresList.filter(
           (fornecedor: { nome: string }) => fornecedor?.nome.toLocaleLowerCase()
             .indexOf(value) !== -1

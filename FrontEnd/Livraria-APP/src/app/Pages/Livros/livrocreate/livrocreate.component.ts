@@ -1,6 +1,6 @@
 import { DuplicateModalComponent } from './../../../Components/duplicate-modal/duplicate-modal.component';
 import { Router } from '@angular/router';
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { LivroServiceService } from 'src/app/Shared/livro-service.service';
 import { NgForm } from '@angular/forms';
 import { Livro } from 'src/app/Shared/livro.model';
@@ -49,8 +49,8 @@ export class LivroCreateComponent implements OnInit {
     let duplicatas: Livro[] = this.getDuplicates(form);
     if (duplicatas.length > 0) {
       let btnModal = document.getElementById("callModal") as HTMLButtonElement;
-      let duplicateModal: DuplicateModalComponent = new DuplicateModalComponent(this.service, this);
-      duplicateModal.setDuplicates(duplicatas, form);
+      let duplicateModal: DuplicateModalComponent = new DuplicateModalComponent(this.service);
+      duplicateModal.setLivros(duplicatas, form);
 
       btnModal.click();
     }

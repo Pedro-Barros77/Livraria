@@ -1,12 +1,12 @@
-#voltarAutor{
+#voltarFornecedor{
   margin-top:18px;
   background-color: rgb(95, 95, 95);
 }
-#voltarAutor i{
+#voltarFornecedor i{
   color: white;
 }
 
-#voltarAutor:hover{
+#voltarFornecedor:hover{
   transition: 500ms;
   background-color: black;
   cursor: pointer;

@@ -67,7 +67,7 @@
   <table id="tabela" class="table table-striped table-hover">
     <thead class="table-dark">
       <tr>
-        <th class="col-2">
+        <th class="col-auto">
           <div class="row noGap align-items-center">
             <div class="col-auto noGap">
               <button id="btnSelecionar" (click)="startSelection()" type="button"
@@ -100,7 +100,7 @@
         <th class="col-1">
           <p>Imagem</p>
         </th>
-        <th class="col-4">
+        <th class="col">
           <p>Titulo</p>
         </th>
         <th class="col-1">
@@ -167,7 +167,7 @@
     </tfoot>
   </table>
 
-  <delete-modal></delete-modal>
-  <details-modal></details-modal>
+  <delete-modal (delete)="confirmDelete($event)"></delete-modal>
+  <details-modal [origin]="'livros'"></details-modal>
 
 </div>

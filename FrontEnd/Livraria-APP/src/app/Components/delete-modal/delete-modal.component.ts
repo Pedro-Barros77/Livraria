@@ -1,7 +1,8 @@
 import { LivroServiceService } from 'src/app/Shared/livro-service.service';
-import { Component, OnInit } from '@angular/core';
-import { LivroListComponent } from 'src/app/Pages/Livros/livrolist/livrolist.component';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Livro } from 'src/app/Shared/livro.model';
+import { Autor } from 'src/app/Shared/autor.model';
+import { Fornecedor } from 'src/app/Shared/fornecedor.model';
 
 @Component({
   selector: 'delete-modal',
@@ -10,21 +11,25 @@ import { Livro } from 'src/app/Shared/livro.model';
 })
 export class DeleteModalComponent implements OnInit {
 
-  constructor(list: LivroListComponent, service: LivroServiceService) {
-    this.list = list;
+  constructor(service: LivroServiceService) {
     this.service = service;
   }
 
-  public list: LivroListComponent;
   public service: LivroServiceService;
 
   ngOnInit(): void {
   }
 
+  @Output() delete = new EventEmitter<DeleteResponse>();
+
   setLivro(livro: Livro) {
     let body = document.getElementById("modalBodyDelete")!;
     body.setAttribute("name",livro.id.toString());
     body.innerHTML = "";
+
+    let title = document.getElementById("deleteModalLabel")!;
+    title.innerText = "Tem certeza que deseja excluir o livro?";
+    title.setAttribute("name","livro");
 
     let pTitulo = document.createElement("p");
     pTitulo.innerText = "Titulo: " + livro.titulo;
@@ -53,10 +58,14 @@ export class DeleteModalComponent implements OnInit {
     body.appendChild(pFornecedor);
   }
 
-  setIds(selectedIds: number[]) {
+  setIdLivros(selectedIds: number[]) {
     let body = document.getElementById("modalBodyDelete")!;
     body.setAttribute("name","multiple");
     let i = 1;
+
+    let title = document.getElementById("deleteModalLabel")!;
+    title.innerText = "Tem certeza que deseja excluir "+selectedIds.length+" livros?";
+    title.setAttribute("name","livro");
 
     selectedIds.forEach(id => {
       let livro = this.service.livrosList.find(liv => liv.id == id)!;
@@ -64,6 +73,84 @@ export class DeleteModalComponent implements OnInit {
       let pIndex = document.createElement("p");
       pIndex.innerText = i + "- " + livro.titulo;
       body.classList.add("b" + livro.id);
+      body.appendChild(pIndex);
+      i++;
+    });
+  }
+
+  setAutor(autor: Autor) {
+    let body = document.getElementById("modalBodyDelete")!;
+    body.setAttribute("name",autor.id.toString());
+    body.innerHTML = "";
+
+    let title = document.getElementById("deleteModalLabel")!;
+    title.innerText = "Tem certeza que deseja excluir o autor?";
+    title.setAttribute("name","autor");
+
+    let pNome = document.createElement("p");
+    pNome.innerText = "Nome: " + autor.nome;
+
+    body.appendChild(pNome);
+  }
+
+  setIdAutores(selectedIds: number[]) {
+    let body = document.getElementById("modalBodyDelete")!;
+    body.setAttribute("name","multiple");
+    let i = 1;
+
+    let title = document.getElementById("deleteModalLabel")!;
+    title.innerText = "Tem certeza que deseja excluir "+selectedIds.length+" autores?";
+    title.setAttribute("name","autor");
+
+    selectedIds.forEach(id => {
+      let autor = this.service.autoresList.find(aut => aut.id == id)!;
+
+      let pIndex = document.createElement("p");
+      pIndex.innerText = i + "- " + autor.nome;
+      body.classList.add("b" + autor.id);
+      body.appendChild(pIndex);
+      i++;
+    });
+  }
+
+  setFornecedor(fornecedor: Fornecedor) {
+    let body = document.getElementById("modalBodyDelete")!;
+    body.setAttribute("name",fornecedor.id.toString());
+    body.innerHTML = "";
+
+    let title = document.getElementById("deleteModalLabel")!;
+    title.innerText = "Tem certeza que deseja excluir o fornecedor?";
+    title.setAttribute("name","fornecedor");
+
+    let pNome = document.createElement("p");
+    pNome.innerText = "Nome: " + fornecedor.nome;
+
+    let pTelefone = document.createElement("p");
+    pTelefone.innerText = "Telefone: " + fornecedor.telefone;
+
+    let pEmail = document.createElement("p");
+    pEmail.innerText = "E-Mail: " + fornecedor.email;
+
+    body.appendChild(pNome);
+    body.appendChild(pTelefone);
+    body.appendChild(pEmail);
+  }
+
+  setIdFornecedores(selectedIds: number[]) {
+    let body = document.getElementById("modalBodyDelete")!;
+    body.setAttribute("name","multiple");
+    let i = 1;
+
+    let title = document.getElementById("deleteModalLabel")!;
+    title.innerText = "Tem certeza que deseja excluir "+selectedIds.length+" fornecedores?";
+    title.setAttribute("name","fornecedor");
+
+    selectedIds.forEach(id => {
+      let fornecedor = this.service.fornecedoresList.find(forn => forn.id == id)!;
+
+      let pIndex = document.createElement("p");
+      pIndex.innerText = i + "- " + fornecedor.nome;
+      body.classList.add("b" + fornecedor.id);
       body.appendChild(pIndex);
       i++;
     });
@@ -81,32 +168,21 @@ export class DeleteModalComponent implements OnInit {
       ids.push(parseInt(id.replace("b","")))
     });
 
-    if(isMultiple){
-      this.deleteLivros(ids);
-    }
-    else{
-      this.deleteLivro(parseInt(body.getAttribute("name")!));
+    if(!isMultiple){
+      ids = [parseInt(body.getAttribute("name")!)];
     }
 
-    this.list.cancelSelection();
+    let title = document.getElementById("deleteModalLabel")!;
+    this.delete.emit(new DeleteResponse(ids, title.getAttribute("name")!));
+    console.log("Emitting: " + title.getAttribute("name")!);
   }
+}
 
-  deleteLivro(id: number) {
-    this.service.deleteLivro(id).subscribe(
-      response => this.service.refreshList()
-    );
+class DeleteResponse{
+  ids: number[];
+  origin: string;
+  constructor(ids: number[], origin: string){
+    this.ids = ids;
+    this.origin = origin;
   }
-
-  deleteLivros(ids: number[]) {
-    let i: number = 0;
-    ids.forEach(id => {
-      this.service.deleteLivro(id).subscribe(
-        response =>{
-          if(i == ids.length-1){this.service.refreshList();}
-          i++;
-        }
-      );
-    });
-  }
-
 }

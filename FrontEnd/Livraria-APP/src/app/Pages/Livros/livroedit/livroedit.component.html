@@ -19,8 +19,6 @@
 
   <form class="was-validated" method="post" novalidate autocomplete="off" #form="ngForm" (submit)="onSubmit(form)">
 
-
-
     <div class="col col-lg-8">
       <!-- ID oculto -->
       <input type="hidden" name="id" [value]="service.formData.id" />
@@ -110,8 +108,8 @@
       <div class="col-12 col-md-8">
         <div class="form-group">
           <br />
-          <button id="callModal" style="display: none;" class="btn btn-primary" data-bs-toggle="modal"
-            data-bs-target="#duplicateModal" type="button"></button>
+          <button id="callModal" style="display: none;" class="btn btn-primary" 
+          data-bs-toggle="modal" data-bs-target="#duplicateModal" type="button"></button>
           <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Salvar</button>
         </div>
       </div>
@@ -120,4 +118,4 @@
   </form>
 </div>
 
-<duplicate-modal-edit></duplicate-modal-edit>
+<duplicate-modal (confirm)="confirmUpdate()"></duplicate-modal>

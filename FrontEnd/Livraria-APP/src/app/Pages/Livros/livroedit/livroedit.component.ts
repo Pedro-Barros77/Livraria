@@ -4,7 +4,6 @@ import { Component, Directive, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Form, NgForm } from '@angular/forms';
 import { DuplicateModalComponent } from 'src/app/Components/duplicate-modal/duplicate-modal.component';
-import { DuplicateModalEditComponent } from 'src/app/Components/duplicate-modal/duplicate-modal-edit.component';
 
 @Component({
   selector: 'app-edit',
@@ -46,8 +45,8 @@ export class LivroEditComponent implements OnInit {
     let duplicatas: Livro[] = this.getDuplicates(form);
     if (duplicatas.length > 0) {
       let btnModal = document.getElementById("callModal") as HTMLButtonElement;
-      let duplicateModal: DuplicateModalEditComponent = new DuplicateModalEditComponent(this.service, this);
-      duplicateModal.setDuplicates(duplicatas, form);
+      let duplicateModal: DuplicateModalComponent = new DuplicateModalComponent(this.service);
+      duplicateModal.setLivros(duplicatas, form);
 
       btnModal.click();
     }
@@ -71,8 +70,6 @@ export class LivroEditComponent implements OnInit {
   updateRecord(form: NgForm) {
     let hasFile: boolean = !(this.fileForm == null || this.fileForm == undefined);
     this.service.fileData = this.fileForm!;
-
-
 
     this.service.putLivro().subscribe(
       response => {
@@ -160,16 +157,10 @@ export class LivroEditComponent implements OnInit {
 
           //Se o número de palavras repetidas deste livro >= 50%
           //do número de palavras do livro cadastrado
-          if (duplicatas >= livPalavras.length / 2 && !livrosRepetidos.includes(liv)) {
+          if (duplicatas >= livPalavras.length / 2 && !livrosRepetidos.includes(liv) && liv.id != this.service.formData.id) {
             livrosRepetidos.push(liv);
           }
         });
-
-        let thisLivro =this.service.livrosList.find(liv => liv.id == this.service.formData.id)!;
-
-        if(livrosRepetidos.includes(thisLivro)){
-            livrosRepetidos.splice(livrosRepetidos.indexOf(thisLivro),1);
-          }
 
         if (livrosRepetidos.length > 0) {
           hasDuplicate = true;

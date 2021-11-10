@@ -62,22 +62,22 @@ export class LivroListComponent implements OnInit {
 
 
   modalDeleteSingle(livro: Livro) {
-    let delModal: DeleteModalComponent = new DeleteModalComponent(this, this.service);
+    let delModal: DeleteModalComponent = new DeleteModalComponent(this.service);
     delModal.setLivro(livro);
   }
 
   modalDeleteMultiple(ids: number[]) {
     if (ids.length > 0) {
-      let delModal: DeleteModalComponent = new DeleteModalComponent(this, this.service);
-      delModal.setIds(ids);
+      let delModal: DeleteModalComponent = new DeleteModalComponent(this.service);
+      delModal.setIdLivros(ids);
       (<HTMLButtonElement>document.getElementById("callDeleteModal")).click();
     }
   }
 
   openDetails(livro: Livro){
     this.populateForm(livro);
-    let detailsModal = new DetailsModalComponent(this, this.service);
-    detailsModal.setImage();
+    let detailsModal = new DetailsModalComponent(this.service);
+    detailsModal.setLivro();
   }
 
 
@@ -103,7 +103,6 @@ export class LivroListComponent implements OnInit {
       btnSelecionar.style.backgroundColor = "rgb(208, 238, 223)";
     }
   }
-
 
   cancelSelection() {
     let btnSelecionar = document.getElementById("btnSelecionar")!;
@@ -156,5 +155,47 @@ export class LivroListComponent implements OnInit {
     let img = document.getElementById("img-" + id)!;
     // img.classList.remove("translate-middle");
     // img.classList.add("translate-middle-x");
+  }
+
+  confirmDelete(res: DeleteResponse){
+    if(res.origin != "livro"){
+      return;
+    }
+
+    if(res.ids.length > 1){
+      this.deleteLivros(res.ids);
+    }
+    else{
+      this.deleteLivro(res.ids[0]);
+    }
+
+    this.cancelSelection();
+  }
+
+  deleteLivro(id: number) {
+    this.service.deleteLivro(id).subscribe(
+      response => this.service.refreshList()
+    );
+  }
+
+  deleteLivros(ids: number[]) {
+    let i: number = 0;
+    ids.forEach(id => {
+      this.service.deleteLivro(id).subscribe(
+        response =>{
+          if(i == ids.length-1){this.service.refreshList();}
+          i++;
+        }
+      );
+    });
+  }
+}
+
+class DeleteResponse{
+  ids: number[];
+  origin: string;
+  constructor(ids: number[], origin: string){
+    this.ids = ids;
+    this.origin = origin;
   }
 }

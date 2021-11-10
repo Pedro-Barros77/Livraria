@@ -1,4 +1,3 @@
-import { DuplicateModalEditComponent } from 'src/app/Components/duplicate-modal/duplicate-modal-edit.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {HttpClientModule} from '@angular/common/http'
@@ -23,6 +22,9 @@ import { DetailsModalComponent } from './Components/details-modal/details-modal.
 import { AutorlistComponent } from './Pages/Autores/autorlist/autorlist.component';
 import { AutorcreateComponent } from './Pages/Autores/autorcreate/autorcreate.component';
 import { FornecedorlistComponent } from './Pages/Fornecedores/fornecedorlist/fornecedorlist.component';
+import { FornecedorcreateComponent } from './Pages/Fornecedores/fornecedorcreate/fornecedorcreate.component';
+import { AutoreditComponent } from './Pages/Autores/autoredit/autoredit.component';
+import { FornecedoreditComponent } from './Pages/Fornecedores/fornecedoredit/fornecedoredit.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,6 @@ import { FornecedorlistComponent } from './Pages/Fornecedores/fornecedorlist/for
     CardLivroComponent,
     DeleteModalComponent,
     DuplicateModalComponent,
-    DuplicateModalEditComponent,
     DetailsModalComponent,
 
     LivroListComponent,
@@ -45,7 +46,10 @@ import { FornecedorlistComponent } from './Pages/Fornecedores/fornecedorlist/for
     HomeComponent,
     ContatoComponent,
     QuemSomosComponent,
-    FornecedorlistComponent
+    FornecedorlistComponent,
+    FornecedorcreateComponent,
+    AutoreditComponent,
+    FornecedoreditComponent
   ],
   imports: [
     BrowserModule,

@@ -1,3 +1,6 @@
+import { FornecedoreditComponent } from './Pages/Fornecedores/fornecedoredit/fornecedoredit.component';
+import { AutoreditComponent } from './Pages/Autores/autoredit/autoredit.component';
+import { FornecedorcreateComponent } from './Pages/Fornecedores/fornecedorcreate/fornecedorcreate.component';
 import { FornecedorlistComponent } from './Pages/Fornecedores/fornecedorlist/fornecedorlist.component';
 import { AutorcreateComponent } from './Pages/Autores/autorcreate/autorcreate.component';
 import { AutorlistComponent } from './Pages/Autores/autorlist/autorlist.component';
@@ -19,9 +22,12 @@ const routes: Routes = [
 
   {path: "autores-list", component: AutorlistComponent},
   {path: "autores-create", component: AutorcreateComponent},
+  {path: "autores-edit", component: AutoreditComponent},
 
 
   {path: "fornecedores-list", component: FornecedorlistComponent},
+  {path: "fornecedores-create", component: FornecedorcreateComponent},
+  {path: "fornecedores-edit", component: FornecedoreditComponent},
 
 
 

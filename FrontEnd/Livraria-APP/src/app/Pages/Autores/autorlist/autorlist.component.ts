@@ -3,6 +3,7 @@ import { LivroServiceService } from 'src/app/Shared/livro-service.service';
 import { Component, OnInit } from '@angular/core';
 import { Autor } from 'src/app/Shared/autor.model';
 import { DeleteModalComponent } from 'src/app/Components/delete-modal/delete-modal.component';
+import { DetailsModalComponent } from 'src/app/Components/details-modal/details-modal.component';
 
 @Component({
   selector: 'autores-list',
@@ -21,6 +22,7 @@ export class AutorlistComponent implements OnInit {
     this.service.refreshList();
     this.service.refreshAutores();
     this.service.refreshFornecedores();
+    this.service.FilterType = "Nome do Autor";
   }
 
   populateForm(selectedRecord: Autor) {
@@ -28,22 +30,21 @@ export class AutorlistComponent implements OnInit {
   }
 
   modalDeleteSingle(autor: Autor) {
-    //let delModal: DeleteModalComponent = new DeleteModalComponent(this, this.service);
-    //delModal.setAutor(autor);
+    let delModal: DeleteModalComponent = new DeleteModalComponent(this.service);
+    delModal.setAutor(autor);
   }
 
   modalDeleteMultiple(ids: number[]) {
     if (ids.length > 0) {
-      //let delModal: DeleteModalComponent = new DeleteModalComponent(this, this.service);
-      //delModal.setIds(ids);
-      //(<HTMLButtonElement>document.getElementById("Autor")).click();
+      let delModal: DeleteModalComponent = new DeleteModalComponent(this.service);
+      delModal.setIdAutores(ids);
+      (<HTMLButtonElement>document.getElementById("callDeleteModal")).click();
     }
   }
 
   openDetails(autor: Autor){
     this.populateForm(autor);
-    //let detailsModal = new DetailsModalComponent(this, this.service);
-    //detailsModal.setImage();
+    let detailsModal = new DetailsModalComponent(this.service);
   }
 
   selectedAutores: Autor[] = [];
@@ -102,5 +103,47 @@ export class AutorlistComponent implements OnInit {
       IDs.push(id);
     });
     return IDs;
+  }
+
+  confirmDelete(res: DeleteResponse){
+    if(res.origin != "autor"){
+      return;
+    }
+    
+    if(res.ids.length > 1){
+      this.deleteAutores(res.ids);
+    }
+    else{
+      this.deleteAutor(res.ids[0]);
+    }
+
+    this.cancelSelection();
+  }
+
+  deleteAutor(id: number) {
+    this.service.deleteAutor(id).subscribe(
+      response => this.service.refreshAutores()
+    );
+  }
+
+  deleteAutores(ids: number[]) {
+    let i: number = 0;
+    ids.forEach(id => {
+      this.service.deleteAutor(id).subscribe(
+        response =>{
+          if(i == ids.length-1){this.service.refreshAutores();}
+          i++;
+        }
+      );
+    });
+  }
+}
+
+class DeleteResponse{
+  ids: number[];
+  origin: string;
+  constructor(ids: number[], origin: string){
+    this.ids = ids;
+    this.origin = origin;
   }
 }

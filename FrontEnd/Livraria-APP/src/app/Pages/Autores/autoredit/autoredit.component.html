@@ -7,7 +7,7 @@
       </button>
     </div>
     <div class="col col-lg-7 text-center">
-      <p class="display-4 translate-middle-x">Novo Autor</p>
+      <p class="display-4 translate-middle-x">Editar Autor</p>
     </div>
   </div>
 
@@ -18,6 +18,11 @@
   </div>
 
   <form class="was-validated" method="post" novalidate autocomplete="off" #form="ngForm" (submit)="onSubmit(form)">
+
+    <div class="col col-lg-8">
+      <!-- ID oculto -->
+      <input type="hidden" name="id" [value]="service.formDataAutor.id" />
+    </div>
 
     <div class="row justify-content-lg-center">
 
@@ -51,4 +56,4 @@
   </form>
 </div>
 
-<duplicate-modal (confirm)="confirmCreate()"></duplicate-modal>
+<duplicate-modal (confirm)="confirmUpdate()"></duplicate-modal>
