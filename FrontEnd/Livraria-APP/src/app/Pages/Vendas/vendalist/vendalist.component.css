@@ -1,0 +1,84 @@
+.noGap{
+    padding:0;
+    margin: 0;
+  }
+
+  #dpdFiltro{
+    width: 100%;
+  }
+
+  .dropdown-menu{
+    min-width: 100%;
+  }
+
+  #btnOrdem{
+    width: 80%;
+  }
+
+  #dpdOrdem{
+    width: 20%;
+    margin-right: 13px;
+  }
+
+
+  .btnWhite{
+    background-color: white;
+    border: 1px solid gray;
+  }
+  .btnWhite:hover{
+    background-color: rgb(238, 238, 238);
+    border: 1px solid black;
+  }
+
+  .col{
+    padding-right: 0;
+  }
+
+  .btnAction{
+    width: auto;
+    height: 100%;
+    margin:0 5px 0 0;
+    padding: 1px 4px;
+  }
+
+  thead tr th{
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  thead tr th p{
+    margin:0;
+    padding: 0;
+    font-size: larger;
+  }
+
+  #btnSelecionarVenda{
+    margin: 5px 0;
+    padding: 5px;
+    line-height: 1rem;
+    background-color: rgb(208, 238, 223);
+  }
+
+  #selectionOptionsVenda{
+    color: white;
+    font-size: larger;
+    padding: 0;
+    margin: 0;
+    width: auto;
+    height: auto;
+  }
+
+  .ckbSelect{
+    width: 25px;
+    height: 25px;
+    margin: 0 auto;
+  }
+
+  .slcOptions li:hover{
+    cursor: default;
+  }
+
+  .livroImg{
+    width: 25px;
+    height: 30px;
+  }

@@ -53,7 +53,7 @@ export class AutoreditComponent implements OnInit {
   updateRecord(form: NgForm) {
     this.service.putAutor().subscribe(
       response => {
-        let id = this.service.formData.id;
+        let id = this.service.formDataAutor.id;
 
         this.resetForm(form);
         this.router.navigate(["/autores-list"])

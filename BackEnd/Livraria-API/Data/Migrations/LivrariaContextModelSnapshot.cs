@@ -42,10 +42,10 @@ namespace Livraria_API.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("LivroID")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("DataRegistro")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("MinQuantidade")
+                    b.Property<int>("LivroID")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantidade")
@@ -122,6 +122,12 @@ namespace Livraria_API.Data.Migrations
 
                     b.Property<string>("ImageExt")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("MinQuantidade")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantidadeTotal")
+                        .HasColumnType("int");
 
                     b.Property<string>("Titulo")
                         .HasMaxLength(50)

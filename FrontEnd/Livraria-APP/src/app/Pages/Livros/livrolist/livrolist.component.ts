@@ -25,6 +25,7 @@ export class LivroListComponent implements OnInit {
     this.service.refreshList();
     this.service.refreshAutores();
     this.service.refreshFornecedores();
+    this.service.FilterType = "Titulo";
   }
 
   populateForm(selectedRecord: Livro) {
@@ -78,6 +79,7 @@ export class LivroListComponent implements OnInit {
     this.populateForm(livro);
     let detailsModal = new DetailsModalComponent(this.service);
     detailsModal.setLivro();
+    detailsModal.setRowNumeroOff();
   }
 
 

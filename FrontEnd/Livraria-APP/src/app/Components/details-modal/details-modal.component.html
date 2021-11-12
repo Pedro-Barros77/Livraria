@@ -1,9 +1,10 @@
-<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="detailsModal" tabindex="-1"
+  aria-labelledby="detailsModalLabel" aria-hidden="true">
   <div id="modalDetailsDialog" class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="deleteModalLabel">Visualizar detalhes</h5>
-        <button (click)="resetar()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button id="btnFecharDetail" (click)="resetar()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div id="detailsModalLabel" class="modal-body">
 
@@ -76,6 +77,36 @@
                   </div>
 
                 </div>
+
+                <div class="row itemLinha">
+
+                  <div class="col">
+                    <div class="row">
+                      <div class="col-auto">
+                        <h5>Em estoque:</h5>
+                      </div>
+                      <div class="col-auto">
+                        {{service.formData.quantidadeTotal}}
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="row itemLinha">
+
+                  <div class="col">
+                    <div class="row">
+                      <div class="col-auto">
+                        <h5>Quantidade Mínima:</h5>
+                      </div>
+                      <div class="col-auto">
+                        {{service.formData.minQuantidade}}
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </div>
           </div>
@@ -121,24 +152,251 @@
           </div>
 
         </div>
-        <!-- ######################## -->
+
+        <div *ngIf="origin == 'fornecedores'">
+          <!-- ######################## -->
+          <div class="row justify-content-center">
+
+            <div class="col">
+              <div class="row itemLinha">
+
+                <div class="col">
+                  <div class="row">
+                    <div class="col-auto">
+                      <h5>Nome:</h5>
+                    </div>
+                    <div class="col-auto">
+                      <p>{{service.formDataFornecedor.nome}}</p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row itemLinha">
+
+                <div class="col">
+                  <div class="row">
+                    <div class="col-auto">
+                      <h5>Telefone:</h5>
+                    </div>
+                    <div class="col-auto">
+                      <p>{{service.formDataFornecedor.telefone}}</p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row itemLinha">
+
+                <div class="col">
+                  <div class="row">
+                    <div class="col-auto">
+                      <h5>E-Mail:</h5>
+                    </div>
+                    <div class="col-auto">
+                      <p>{{service.formDataFornecedor.email}}</p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- <div class="row itemLinha">
+
+                <div class="col">
+                  <div class="row">
+                    <div class="col-auto">
+
+                    </div>
+                    <div class="col-auto">
+
+                    </div>
+                  </div>
+                </div>
+
+              </div> -->
+
+            </div>
+          </div>
+
+        </div>
+
+        <div *ngIf="origin == 'estoques'">
+          <!-- ######################## -->
+
+          <div class="row justify-content-center">
+            <div class="col-auto">
+              <img id="imgPlaceholder" src="" alt="Img">
+            </div>
+
+            <div class="col">
+              <div class="row itemLinha">
+                <div class="col-auto">
+                  <h5>Livro:</h5>
+                </div>
+                <div class="col-auto">
+                  <p *ngIf="this.service.formDataEstoque.livroID != 0">
+                    {{getLivro(this.service.formDataEstoque.livroID).titulo}}</p>
+                </div>
+
+              </div>
+
+              <div class="row itemLinha">
+                <div class="col-auto">
+                  <h5>Autor:</h5>
+                </div>
+                <div class="col-auto">
+                  <p>{{service.getAutor(this.service.formDataEstoque.livroID).nome}}</p>
+                </div>
+
+              </div>
+
+              <div class="row itemLinha">
+                <div class="col-auto">
+                  <h5>Quantidade:</h5>
+                </div>
+                <div class="col-auto">
+                  <p>{{this.service.formDataEstoque.quantidade}}</p>
+                </div>
+
+              </div>
+
+              <div class="row itemLinha">
+                <div class="col-auto">
+                  <h5>Data do Lançamento:</h5>
+                </div>
+                <div class="col-auto">
+                  <p *ngIf="this.service.formDataEstoque.id != 0">
+                    {{this.service.formDataEstoque.dataRegistro! | date:'dd/MM/yyyy'}}
+                    ({{this.service.formDataEstoque.dataRegistro! | date:'HH:mm'}})
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <div *ngIf="origin == 'summary'">
+          <!-- ######################## -->
+
+          <div class="row justify-content-center">
+            <div class="col-auto">
+              <img id="imgPlaceholder" src="" alt="Img">
+            </div>
+
+            <div class="col">
+              <div class="row itemLinha">
+                <div class="col-auto">
+                  <h5>Livro:</h5>
+                </div>
+                <div class="col-auto">
+                  <p *ngIf="this.service.formDataEstoque.livroID != 0">
+                    {{getLivro(this.service.formDataEstoque.livroID).titulo}}</p>
+                </div>
+
+              </div>
+
+              <div class="row itemLinha">
+                <div class="col-auto">
+                  <h5>Valor:</h5>
+                </div>
+                <div class="col-auto">
+                  <p *ngIf="this.service.formDataEstoque.livroID != 0">
+                    {{service.getLivro(this.service.formDataEstoque.livroID).valor}}</p>
+                </div>
+
+              </div>
+
+              <div class="row itemLinha">
+                <div class="col-auto">
+                  <h5>Disponível:</h5>
+                </div>
+                <div class="col-auto">
+                  <p>{{this.service.formDataEstoque.quantidade}}</p>
+                </div>
+              </div>
+
+              <div class="row itemLinha">
+                <div class="col-auto">
+                  <h5>Quantidade Mínima:</h5>
+                </div>
+                <div class="col-auto">
+                  <p *ngIf="this.service.formDataEstoque.livroID != 0">
+                    {{service.getLivro(this.service.formDataEstoque.livroID).minQuantidade}}</p>
+                </div>
+              </div>
+
+              <div class="row itemLinha">
+                <div class="col-auto">
+                  <h5>Fornecedor:</h5>
+                </div>
+                <div class="col-auto">
+                  <p *ngIf="this.service.formDataEstoque.livroID != 0">
+                    {{service.getFornecedor(this.service.formDataEstoque.livroID).nome}}</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
       </div>
+
 
       <div class="modal-footer">
         <!-- <button (click)="list.modalDeleteSingle(livro!)" data-bs-dismiss="modal" data-bs-toggle="modal"
               data-bs-target="#deleteModal" type="button" class="btn btn-outline-danger btnAction">
               Excluir</button> -->
-        <button *ngIf="origin =='livros'" data-bs-dismiss="modal" type="button" class="btn btn-outline-secondary btnBlackHover"
-          [routerLink]="['/livros-edit']"> <i class="fas fa-pen"></i> Editar</button>
+        <button id="btnEdit" *ngIf="origin =='livros'" data-bs-dismiss="modal" type="button"
+          class="btn btn-outline-secondary btnBlackHover" [routerLink]="['/livros-edit']"> <i class="fas fa-pen"></i>
+          Editar</button>
 
-          <button *ngIf="origin =='autores'" data-bs-dismiss="modal" type="button" class="btn btn-outline-secondary btnBlackHover"
-          [routerLink]="['/autores-edit']"> <i class="fas fa-pen"></i> Editar</button>
+        <button *ngIf="origin =='autores'" data-bs-dismiss="modal" type="button"
+          class="btn btn-outline-secondary btnBlackHover" [routerLink]="['/autores-edit']"> <i class="fas fa-pen"></i>
+          Editar</button>
 
-          <button *ngIf="origin =='fornecedores'" data-bs-dismiss="modal" type="button" class="btn btn-outline-secondary btnBlackHover"
-          [routerLink]="['/fornecedores-edit']"> <i class="fas fa-pen"></i> Editar</button>
+        <button *ngIf="origin =='fornecedores'" data-bs-dismiss="modal" type="button"
+          class="btn btn-outline-secondary btnBlackHover" [routerLink]="['/fornecedores-edit']"> <i
+            class="fas fa-pen"></i> Editar</button>
 
-        <button (click)="resetar()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+
+
+
+
+
+
+        <div id="rowNumero" class="row justify-content-center align-items-center">
+          <div class="col-5 align-self-center text-center">
+            <button (click)="alterarValor(false)" type="button" class="btn btn-outline-danger"><i
+                class="fas fa-minus"></i></button>
+          </div>
+          <div class="col-2 align-self-center text-center noGap">
+            <div class="text-center lblNumero" style="text-align: center;">{{quantidade}}</div>
+          </div>
+          <div class="col-5 align-self-center text-center">
+            <button (click)="alterarValor(true)" type="button" class="btn"
+            [ngClass]="{'btn-outline-success': service.formData.quantidadeTotal - quantidade - getItem().quantidade > 0, 'btn-outline-secondary': service.formData.quantidadeTotal - quantidade - getItem().quantidade <= 0}" [disabled]="service.formData.quantidadeTotal - quantidade - getItem().quantidade <= 0">
+            <i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+
+        <div class="col-auto">
+
+          <button (click)="confirmarItem()" type="button" class="btn btn-outline-primary">
+            <i class="fas fa-cart-plus"></i> Adicionar</button>
+        </div>
+
+        <div class="col-auto">
+
+          <button (click)="resetar()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+
+        </div>
       </div>
+
     </div>
   </div>
 </div>

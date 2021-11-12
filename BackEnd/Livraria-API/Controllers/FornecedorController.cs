@@ -109,6 +109,17 @@ namespace Livraria_API.Controllers
                 return NotFound();
             }
 
+            if(_context.Livros.Any(x => x.FornecedorID == id)){
+                foreach (var livro in _context.Livros.Where(
+                    x => x.FornecedorID == id
+                ))
+                {
+                    livro.FornecedorID = null;
+                    livro.Fornecedor = null;
+                    _context.Entry(livro).State = EntityState.Modified;
+                }
+            }
+
             _context.Fornecedores.Remove(fornecedor);
             await _context.SaveChangesAsync();
 

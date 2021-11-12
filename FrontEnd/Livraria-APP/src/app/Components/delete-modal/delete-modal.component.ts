@@ -3,6 +3,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Livro } from 'src/app/Shared/livro.model';
 import { Autor } from 'src/app/Shared/autor.model';
 import { Fornecedor } from 'src/app/Shared/fornecedor.model';
+import { Estoque } from 'src/app/Shared/estoque.model';
 
 @Component({
   selector: 'delete-modal',
@@ -151,6 +152,51 @@ export class DeleteModalComponent implements OnInit {
       let pIndex = document.createElement("p");
       pIndex.innerText = i + "- " + fornecedor.nome;
       body.classList.add("b" + fornecedor.id);
+      body.appendChild(pIndex);
+      i++;
+    });
+  }
+
+  setEstoque(estoque: Estoque) {
+    let body = document.getElementById("modalBodyDelete")!;
+    body.setAttribute("name",estoque.id.toString());
+    body.innerHTML = "";
+
+    let title = document.getElementById("deleteModalLabel")!;
+    title.innerText = "Tem certeza que deseja excluir o lançamento?";
+    title.setAttribute("name","estoque");
+
+    let livro = this.service.livrosList.find(liv => liv.id == estoque.livroID)!;
+    let pTitulo = document.createElement("p");
+    pTitulo.innerText = "Livro: " + livro.titulo;
+
+    let pAutor = document.createElement("p");
+    pAutor.innerText = "Autor: " + this.service.getAutor(estoque.livroID).nome;
+
+    let pQuantidade = document.createElement("p");
+    pQuantidade.innerText = "Quantidade: " + estoque.quantidade;
+
+    body.appendChild(pTitulo);
+    body.appendChild(pAutor);
+    body.appendChild(pQuantidade);
+  }
+
+  setIdEstoques(selectedIds: number[]) {
+    let body = document.getElementById("modalBodyDelete")!;
+    body.setAttribute("name","multiple");
+    let i = 1;
+
+    let title = document.getElementById("deleteModalLabel")!;
+    title.innerText = "Tem certeza que deseja excluir "+selectedIds.length+" lançamentos?";
+    title.setAttribute("name","estoque");
+
+    selectedIds.forEach(id => {
+      let estoque = this.service.estoquesList.find(est => est.id == id)!;
+      let livro = this.service.livrosList.find(liv => liv.id == estoque.livroID)!;
+
+      let pIndex = document.createElement("p");
+      pIndex.innerText = i + "- " + livro.titulo + " ("+estoque.quantidade+")";
+      body.classList.add("b" + id);
       body.appendChild(pIndex);
       i++;
     });

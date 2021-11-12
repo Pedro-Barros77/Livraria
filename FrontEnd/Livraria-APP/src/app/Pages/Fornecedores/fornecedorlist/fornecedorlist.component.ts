@@ -4,6 +4,7 @@ import { LivroServiceService } from 'src/app/Shared/livro-service.service';
 import { Component, OnInit } from '@angular/core';
 import { DeleteModalComponent } from 'src/app/Components/delete-modal/delete-modal.component';
 import { Autor } from 'src/app/Shared/autor.model';
+import { DetailsModalComponent } from 'src/app/Components/details-modal/details-modal.component';
 
 @Component({
   selector: 'fornecedores-list',
@@ -43,8 +44,7 @@ export class FornecedorlistComponent implements OnInit {
 
   openDetails(fornecedor: Fornecedor){
     this.populateForm(fornecedor);
-    //let detailsModal = new DetailsModalComponent(this, this.service);
-    //detailsModal.setImage();
+    let detailsModal = new DetailsModalComponent(this.service);
   }
 
   selectedFornecedores: Fornecedor[] = [];
@@ -104,7 +104,7 @@ export class FornecedorlistComponent implements OnInit {
     });
     return IDs;
   }
-  
+
   confirmDelete(res: DeleteResponse){
     if(res.origin != "fornecedor"){
       return;

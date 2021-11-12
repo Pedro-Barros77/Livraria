@@ -1,3 +1,8 @@
+import { VendacreateComponent } from './Pages/Vendas/vendacreate/vendacreate.component';
+import { VendalistComponent } from './Pages/Vendas/vendalist/vendalist.component';
+import { EstoqueresumoComponent } from './Pages/Estoque/estoqueresumo/estoqueresumo.component';
+import { EstoquecreateComponent } from './Pages/Estoque/estoquecreate/estoquecreate.component';
+import { EstoquelistComponent } from './Pages/Estoque/estoquelist/estoquelist.component';
 import { FornecedoreditComponent } from './Pages/Fornecedores/fornecedoredit/fornecedoredit.component';
 import { AutoreditComponent } from './Pages/Autores/autoredit/autoredit.component';
 import { FornecedorcreateComponent } from './Pages/Fornecedores/fornecedorcreate/fornecedorcreate.component';
@@ -20,6 +25,7 @@ const routes: Routes = [
   {path: "livros-create", component: LivroCreateComponent},
   {path: "livros-edit", component: LivroEditComponent},
 
+
   {path: "autores-list", component: AutorlistComponent},
   {path: "autores-create", component: AutorcreateComponent},
   {path: "autores-edit", component: AutoreditComponent},
@@ -28,6 +34,14 @@ const routes: Routes = [
   {path: "fornecedores-list", component: FornecedorlistComponent},
   {path: "fornecedores-create", component: FornecedorcreateComponent},
   {path: "fornecedores-edit", component: FornecedoreditComponent},
+
+
+  {path: "estoques-summary", component: EstoqueresumoComponent},
+  {path: "estoques-list", component: EstoquelistComponent},
+  {path: "estoques-create", component: EstoquecreateComponent},
+
+  {path: "vendas-list", component: VendalistComponent},
+  {path: "vendas-create", component: VendacreateComponent},
 
 
 

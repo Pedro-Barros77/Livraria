@@ -1,0 +1,177 @@
+<div class="modal fade" id="carrinhoModal" tabindex="-1" aria-labelledby="carrinhoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="carrinhoModalLabel">Carrinho</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="modalBodyCarrinho" class="modal-body">
+        <div class="container-fluid">
+          <div class="row">
+
+
+            <div class="accordion" id="accCliente">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                    aria-expanded="false" aria-controls="collapseOne">
+                    Dados do Cliente
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                  data-bs-parent="#accCliente">
+                  <div class="accordion-body">
+
+                    <!-- ######################### -->
+
+                    <form id="formCliente" class="was-validated" method="post" novalidate autocomplete="off"
+                      #form="ngForm" (submit)="onSubmit(form)">
+                      <div class="row justify-content-center">
+
+                        <div class="col-md-12">
+
+                          <div class="form-group">
+                            <label class="control-label">Cliente</label>
+
+                            <input class="form-control" maxlength="30" placeholder="Cliente" name="nomeCliente"
+                              id="nomeCliente" value="Nome" #nomeCliente="ngModel"
+                              [(ngModel)]="service.formDataVenda.nomeCliente" required
+                              [class.invalid]="nomeCliente.invalid && nomeCliente.touched" />
+
+                            <span class="text-danger invalid-feedback">Campo Cliente obrigatório.</span>
+                          </div>
+
+                        </div>
+                      </div>
+
+                      <div class="row justify-content-center">
+
+                        <div class="col-md-12">
+
+                          <div class="form-group">
+                            <label class="control-label">Contato Cliente (Campo não obrigatório)</label>
+
+                            <input class="form-control" maxlength="80" placeholder="Contato" name="contatoCliente"
+                              id="contatoCliente" value="Contato" #contatoCliente="ngModel"
+                              [(ngModel)]="service.formDataVenda.contatoCliente"
+                              [class.invalid]="contatoCliente.invalid && contatoCliente.touched" />
+                          </div>
+
+                        </div>
+                      </div>
+                    </form>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+            <table id="tabelaCarrinho" class="table table-striped table-hover">
+              <thead class="table-dark">
+                <tr>
+                  <th class="col-2">#</th>
+                  <th class="col-4">
+                    <p>Livro</p>
+                  </th>
+                  <th class="col-4">
+                    <p>Autor</p>
+                  </th>
+                  <th class="col-1">
+                    <p>Valor</p>
+                  </th>
+                  <th class="col-1">
+                    <p>Sub</p>
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody *ngIf="carrinho && carrinho.length" class="table-light">
+
+                <tr *ngFor="let item of carrinho; index as i;">
+                  <td>
+                    <div class="row justify-content-center">
+                      <div class="col-auto noGap">
+                        <button (click)="excluirItem(item)" type="button" class="btn btn-outline-danger btnAction">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
+                      </div>
+
+                      <div class="col-auto noGap">
+                        <button (click)="menosUmItem(item)" type="button" class="btn btnAction"
+                          [ngClass]="{'btn-outline-danger': item.quantidade > 1, 'btn-outline-secondary': item.quantidade <= 1}"
+                          [disabled]="item.quantidade <= 1">
+                          <i class="fas fa-minus"></i>
+                        </button>
+                      </div>
+
+                      <div class="col-auto noGap">
+                        <div class="noGap text-center lblNumero" style="text-align: center;">{{item.quantidade}}</div>
+                      </div>
+
+                      <div class="col-auto noGap">
+                        <button (click)="maisUmItem(item.livro)" type="button" class="btn btnAction"
+                          [ngClass]="{'btn-outline-success': item.livro.quantidadeTotal - getItem(item.livro.id).quantidade  > 0, 'btn-outline-secondary': item.livro.quantidadeTotal - getItem(item.livro.id).quantidade <= 0}"
+                          [disabled]="item.livro.quantidadeTotal - getItem(item.livro.id).quantidade <= 0">
+                          <i class="fas fa-plus"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{{getLivro(item.livro.id).titulo}}</td>
+                  <td>{{service.getAutor(getLivro(item.livro.id).id).nome}}</td>
+                  <td>{{getLivro(item.livro.id).valor.toLocaleString("pt-br",{style: "currency",currency: "BRL"})}}</td>
+                  <td>{{(item.quantidade * getLivro(item.livro.id).valor).toLocaleString("pt-br",{style:
+                    "currency",currency: "BRL"})}}</td>
+                </tr>
+              </tbody>
+
+              <tfoot class="table-light">
+                <tr *ngIf="!carrinho.length">
+                  <td colspan="8">
+                    <h6>Nenhum item no carrinho.</h6>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+
+            <div class="row justify-content-end">
+              <div class="col-auto">
+                <p class="display-6">Total: {{getTotal().toLocaleString("pt-br",{style: "currency",currency: "BRL"})}}</p>
+              </div>
+            </div>
+
+
+
+
+            <!-- _______________________________ -->
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="row">
+          <div class="col">
+
+            <div class="form-group">
+              <button class="btn btn-primary" form="formCliente" type="submit" [disabled]="form.invalid">Comprar</button>
+            </div>
+
+          </div>
+
+          <div class="col">
+            
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
