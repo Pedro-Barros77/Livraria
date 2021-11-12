@@ -4,6 +4,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LivroServiceService } from 'src/app/Shared/livro-service.service';
 import { Livro } from 'src/app/Shared/livro.model';
 import { Venda } from 'src/app/Shared/venda.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'carrinho-modal',
@@ -12,11 +13,13 @@ import { Venda } from 'src/app/Shared/venda.model';
 })
 export class CarrinhoModalComponent implements OnInit {
 
-  constructor(service: LivroServiceService) {
+  constructor(service: LivroServiceService, router: Router) {
     this.service = service;
+    this.router = router;
   }
 
   public service: LivroServiceService;
+  router: Router;
 
   ngOnInit(): void {
   }
@@ -124,7 +127,6 @@ export class CarrinhoModalComponent implements OnInit {
       response => {
         this.resetForm(form);
         let responseVenda = response as Venda;
-        console.log("ResponseVenda: " + responseVenda);
 
         this.carrinho.forEach((item: ItemCarrinho) => {
           this.service.formDataItemVenda.livroID = item.livro.id;
@@ -134,13 +136,14 @@ export class CarrinhoModalComponent implements OnInit {
           console.log("Formdata: ");
           console.log(this.service.formDataItemVenda);
 
-          console.log("Json FormData: ")
-          console.log(JSON.stringify(this.service.formDataItemVenda));
-
           this.service.postItemVenda().subscribe(
             res => {
-              console.log("ResponseItem: ");
               console.log(res);
+              if(this.carrinho.indexOf(item) == this.carrinho.length-1){
+                let btnFechar = document.getElementById("btnFechar")! as HTMLButtonElement;
+                btnFechar.click();
+                this.router.navigate(['vendas-list']);
+              }
             },
             erro => { console.log(erro); }
           );

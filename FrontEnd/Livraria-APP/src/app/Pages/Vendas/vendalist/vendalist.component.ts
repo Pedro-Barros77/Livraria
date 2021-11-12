@@ -6,7 +6,7 @@ import { LivroServiceService } from 'src/app/Shared/livro-service.service';
 import { Venda } from 'src/app/Shared/venda.model';
 
 @Component({
-  selector: 'app-vendalist',
+  selector: 'vendas-list',
   templateUrl: './vendalist.component.html',
   styleUrls: ['./vendalist.component.css']
 })

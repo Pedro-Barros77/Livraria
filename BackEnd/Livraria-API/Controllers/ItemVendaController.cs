@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Livraria_API.Data;
 using Livraria_API.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Net;
-using Microsoft.AspNetCore.Http;
 
 namespace Livraria_API.Controllers
 {
@@ -27,7 +27,6 @@ namespace Livraria_API.Controllers
         {
             return _context.ItemVendas.Any(aut => aut.ID == id);
         }
-
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ItemVenda>>> GetItens()
@@ -48,17 +47,17 @@ namespace Livraria_API.Controllers
             return itemVenda;
         }
 
-
-
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutItemVenda(int id, ItemVenda itemVenda)
+        public async Task<IActionResult>
+        PutItemVenda(int id, ItemVenda itemVenda)
         {
             if (id != itemVenda.ID)
             {
                 return BadRequest("ID do parâmetro diferente do ID do FormData");
             }
 
-            if(!ItemVendaExists(id)){
+            if (!ItemVendaExists(id))
+            {
                 return NotFound("O ItemVenda de ID informado não existe");
             }
 
@@ -88,7 +87,15 @@ namespace Livraria_API.Controllers
         {
             try
             {
-                _context.ItemVendas.Add(itemVenda);
+                var livro = _context.Livros.FirstOrDefault(i => i.ID == itemVenda.LivroID);
+
+                if (livro != default)
+                {
+                    livro.QuantidadeTotal -= itemVenda.QtdVenda;
+                    _context.Entry(livro).State = EntityState.Modified;
+                }
+
+                _context.ItemVendas.Add (itemVenda);
                 await _context.SaveChangesAsync();
 
                 return Ok(new { id = itemVenda.ID });
@@ -96,7 +103,10 @@ namespace Livraria_API.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { Message = ex.Message, StackTrace = ex.StackTrace });
+                return BadRequest(new {
+                    Message = ex.Message,
+                    StackTrace = ex.StackTrace
+                });
             }
         }
 
@@ -109,7 +119,7 @@ namespace Livraria_API.Controllers
                 return NotFound();
             }
 
-            _context.ItemVendas.Remove(itemVenda);
+            _context.ItemVendas.Remove (itemVenda);
             await _context.SaveChangesAsync();
 
             return NoContent();
