@@ -17,7 +17,7 @@ namespace Livraria_API.Models
         
         public DateTime? DataVenda { get; set; }
         
-        public int ValorTotal { get; set; }
+        public float ValorTotal { get; set; }
 
         public virtual ICollection<ItemVenda> ItemVenda { get; set; }
     }

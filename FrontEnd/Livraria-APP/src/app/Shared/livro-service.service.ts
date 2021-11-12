@@ -58,7 +58,7 @@ export class LivroServiceService {
   readonly imageURL = 'https://localhost:5000/uploads/';
   readonly estoqueURL = 'https://localhost:5000/api/Estoque';
   readonly vendaURL = 'https://localhost:5000/api/Venda';
-  readonly itemVendaURL = 'https://localhost:5000/api/ItemVEnda';
+  readonly itemVendaURL = 'https://localhost:5000/api/ItemVenda';
 
   livrosList: Livro[] = [];
   autoresList: Autor[] = [];

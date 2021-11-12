@@ -131,9 +131,16 @@ export class CarrinhoModalComponent implements OnInit {
           this.service.formDataItemVenda.qtdVenda = item.quantidade;
           this.service.formDataItemVenda.vendaID = responseVenda.id;
 
+          console.log("Formdata: ");
+          console.log(this.service.formDataItemVenda);
+
+          console.log("Json FormData: ")
+          console.log(JSON.stringify(this.service.formDataItemVenda));
+
           this.service.postItemVenda().subscribe(
             res => {
-              console.log("itemVenda: " + res);
+              console.log("ResponseItem: ");
+              console.log(res);
             },
             erro => { console.log(erro); }
           );
