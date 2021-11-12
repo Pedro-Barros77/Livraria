@@ -1,3 +1,8 @@
+.noGap{
+  padding: 0;
+  margin: 0;
+}
+
 #imgPlaceholder{
   width: 200px;
   height: auto;
@@ -17,4 +22,10 @@ p{
   margin-bottom: 15px;
   background-color: rgb(240, 246, 255);
   padding: 3px 0;
+}
+
+.lblNumero{
+  width: 20px;
+  padding: 0;
+  margin: 0 5px;
 }

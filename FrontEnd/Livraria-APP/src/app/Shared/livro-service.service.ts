@@ -5,6 +5,9 @@ import { Livro } from './livro.model';
 import { Autor } from './autor.model';
 import { Fornecedor } from './fornecedor.model';
 import { Router } from '@angular/router';
+import { Estoque } from './estoque.model';
+import { Venda } from './venda.model';
+import { ItemVenda } from './itemVenda.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,19 +15,57 @@ import { Router } from '@angular/router';
 export class LivroServiceService {
 
   formData: Livro = new Livro();
+  fileData: FormData | null | undefined = new FormData();
+
   formDataAutor: Autor = new Autor();
   formDataFornecedor: Fornecedor = new Fornecedor();
+  formDataEstoque: Estoque = new Estoque();
+  formDataVenda: Venda = new Venda();
+  formDataItemVenda: ItemVenda = new ItemVenda();
 
-  fileData: FormData | null | undefined = new FormData();
+  public set _formDataMinQuantidade(value: any) {
+    if (value) {
+      if (value.toString().length > 6) {
+        (<HTMLInputElement>document.getElementById("minQuantidade")!).value =
+          (<HTMLInputElement>document.getElementById("minQuantidade")!).value.toString().slice(0, -1);
+      }
+      this.formData.minQuantidade = parseInt((<HTMLInputElement>document.getElementById("minQuantidade")!).value);
+    }
+  }
+  public set _formDataEstoqueQuantidade(value: any) {
+    if (value) {
+      if (value.toString().length > 6) {
+        (<HTMLInputElement>document.getElementById("quantidade")!).value =
+          (<HTMLInputElement>document.getElementById("quantidade")!).value.toString().slice(0, -1);
+      }
+      this.formDataEstoque.quantidade = parseInt((<HTMLInputElement>document.getElementById("quantidade")!).value);
+    }
+  }
+  public set _formDataValor(value: any) {
+    if (value) {
+      if (value.toString().length > 10) {
+        (<HTMLInputElement>document.getElementById("txtValor")!).value =
+          (<HTMLInputElement>document.getElementById("txtValor")!).value.toString().slice(0, -1);
+      }
+      this.formData.valor = parseInt((<HTMLInputElement>document.getElementById("txtValor")!).value);
+    }
+  }
+
 
   readonly baseURL = 'https://localhost:5000/api/Livro';
   readonly autorURL = 'https://localhost:5000/api/Autor';
   readonly fornecedorURL = 'https://localhost:5000/api/Fornecedor';
   readonly imageURL = 'https://localhost:5000/uploads/';
+  readonly estoqueURL = 'https://localhost:5000/api/Estoque';
+  readonly vendaURL = 'https://localhost:5000/api/Venda';
+  readonly itemVendaURL = 'https://localhost:5000/api/ItemVenda';
 
   livrosList: Livro[] = [];
   autoresList: Autor[] = [];
   fornecedoresList: Fornecedor[] = [];
+  estoquesList: Estoque[] = [];
+  vendasList: Venda[] = [];
+  ItensVendaList: ItemVenda[] = [];
 
   constructor(
     private http: HttpClient,
@@ -42,7 +83,8 @@ export class LivroServiceService {
         this.livrosList = res as Livro[];
         this.filteredLivros = res as Livro[];
 
-        if (!this.router.url.toString().includes("client")) {
+        if (!this.router.url.toString().includes("client")
+          && !this.router.url.toString().includes("estoques")) {
           this.ReOrder();
           this.ReOrder();
         }
@@ -115,6 +157,82 @@ export class LivroServiceService {
   }
 
 
+  //Estoque############################
+
+  refreshEstoque() {
+    this.http.get(this.estoqueURL)
+      .toPromise()
+      .then(res => {
+
+        this.estoquesList = res as Estoque[];
+        let estoqueComTitulo = Object.assign(res as Estoque[]);
+        estoqueComTitulo.forEach((est: any) => {
+          est.titulo = this.livrosList.find(liv => liv.id == est.livroID)!.titulo;
+        });
+
+        this.filteredEstoques = estoqueComTitulo;
+      });
+  }
+
+  postEstoque() {
+    return this.http.post(this.estoqueURL, this.formDataEstoque);
+  }
+
+  putEstoque() {
+    return this.http.put(`${this.estoqueURL}/${this.formDataEstoque.id}`, this.formDataEstoque);
+  }
+  deleteEstoque(id: number) {
+    return this.http.delete(`${this.estoqueURL}/${id}`);
+  }
+
+
+  //Venda############################
+
+  refreshVendas() {
+    this.http.get(this.vendaURL)
+      .toPromise()
+      .then(res => {
+        this.vendasList = res as Venda[];
+        this.filteredVendas = res as Venda[];
+      });
+  }
+
+  postVenda() {
+    return this.http.post(this.vendaURL, this.formDataVenda);
+  }
+
+  putVenda() {
+    return this.http.put(`${this.vendaURL}/${this.formDataVenda.id}`, this.formDataVenda);
+  }
+  deleteVenda(id: number) {
+    return this.http.delete(`${this.vendaURL}/${id}`);
+  }
+
+
+  //ItemVenda###########################
+
+  refreshItemVenda() {
+    this.http.get(this.itemVendaURL)
+      .toPromise()
+      .then(res => {
+        this.ItensVendaList = res as ItemVenda[];
+      });
+  }
+
+  postItemVenda() {
+    return this.http.post(this.itemVendaURL, this.formDataItemVenda);
+  }
+
+  putItemVenda() {
+    return this.http.put(`${this.itemVendaURL}/${this.formDataItemVenda.id}`, this.formDataItemVenda);
+  }
+  deleteItemVenda(id: number) {
+    return this.http.delete(`${this.itemVendaURL}/${id}`);
+  }
+
+
+
+
 
 
 
@@ -130,23 +248,30 @@ export class LivroServiceService {
       return this.autoresList.find(aut => aut.id == livro?.autorID)!;
     }
     else {
-      return null;
+      let autor: Autor = { id: 0, nome: '' };
+      return autor;
     }
   }
 
   getFornecedor(idLivro: number): any {
     let livro = this.livrosList.find(liv => liv.id == idLivro);
-    if (livro?.autorID != null) {
+    if (livro?.fornecedorID != null) {
       return this.fornecedoresList.find(forn => forn.id == livro?.fornecedorID)!;
     }
     else {
-      return null;
+      let fornecedor: Fornecedor = { id: 0, nome: '', telefone: '', email: '' };
+      return fornecedor;
     }
   }
 
-  getLivros(idAutor: number): any {
+  getLivrosByAutor(idAutor: number): any {
     return this.livrosList.find(liv => liv.autorID == idAutor)!;
   }
+
+  getLivro(idLivro: number): any {
+    return this.livrosList.find(liv => liv.id == idLivro)!;
+  }
+
 
 
 
@@ -158,6 +283,8 @@ export class LivroServiceService {
   public filteredLivros: Livro[] = this.livrosList;
   public filteredAutores: Autor[] = this.autoresList;
   public filteredFornecedores: Fornecedor[] = this.fornecedoresList;
+  public filteredEstoques: Estoque[] = this.estoquesList;
+  public filteredVendas: Venda[] = this.vendasList;
 
   private OrdemCrescente: boolean = true;
   private Alpha: boolean = true;
@@ -173,18 +300,22 @@ export class LivroServiceService {
 
     if (this.OrdemCrescente) {
       if (this.Alpha) {
-        this.filteredLivros.sort((a: any, b: any) => a.titulo.localeCompare(b.titulo));
         document.querySelector("#ordemIcon")!.className = "fas fa-sort-alpha-down";
+
+        this.filteredLivros.sort((a: any, b: any) => a.titulo.localeCompare(b.titulo));
 
         this.filteredAutores.sort((a: any, b: any) => a.nome.localeCompare(b.nome));
         this.filteredFornecedores.sort((a: any, b: any) => a.nome.localeCompare(b.nome));
+        this.filteredEstoques.sort((a: any, b: any) => a.titulo.localeCompare(b.titulo));
       }
       else {
-        this.filteredLivros.sort((n1: any, n2: any) => n1.titulo.length - n2.titulo.length);
         document.querySelector("#ordemIcon")!.className = "fas fa-sort-amount-down-alt";
+
+        this.filteredLivros.sort((n1: any, n2: any) => n1.titulo.length - n2.titulo.length);
 
         this.filteredAutores.sort((n1: any, n2: any) => n1.nome.length - n2.nome.length);
         this.filteredFornecedores.sort((n1: any, n2: any) => n1.nome.localeCompare(n2.nome));
+        this.filteredEstoques.sort((n1: any, n2: any) => n1.titulo.localeCompare(n2.titulo));
       }
     }
     else {
@@ -194,6 +325,7 @@ export class LivroServiceService {
 
         this.filteredAutores.sort((a: any, b: any) => b.nome.localeCompare(a.nome));
         this.filteredFornecedores.sort((a: any, b: any) => b.nome.localeCompare(a.nome));
+        this.filteredEstoques.sort((a: any, b: any) => b.titulo.localeCompare(a.titulo));
       }
       else {
         this.filteredLivros.sort((n1: any, n2: any) => n2.titulo.length - n1.titulo.length);
@@ -201,6 +333,7 @@ export class LivroServiceService {
 
         this.filteredAutores.sort((n1: any, n2: any) => n2.nome.length - n1.nome.length);
         this.filteredFornecedores.sort((n1: any, n2: any) => n2.nome.length - n1.nome.length);
+        this.filteredEstoques.sort((n1: any, n2: any) => n2.titulo.localeCompare(n1.titulo));
       }
     }
   }
@@ -221,9 +354,18 @@ export class LivroServiceService {
   }
   public set SearchFilter(value: string) {
     this._SearchFilter = value;
-    this.filteredLivros = this.SearchFilter ? this.FiltrarLivros(this.SearchFilter) : this.livrosList;
-    this.filteredAutores = this.SearchFilter ? this.FiltrarLivros(this.SearchFilter) : this.autoresList;
-    this.filteredFornecedores = this.SearchFilter ? this.FiltrarLivros(this.SearchFilter) : this.fornecedoresList;
+    if (this.FilterType == "Titulo" || this.FilterType == "Autor" || this.FilterType == "Fornecedor") {
+      this.filteredLivros = this.SearchFilter ? this.FiltrarLivros(this.SearchFilter) : this.livrosList;
+    }
+    else if (this.FilterType == "Nome do Autor") {
+      this.filteredAutores = this.SearchFilter ? this.FiltrarLivros(this.SearchFilter) : this.autoresList;
+    }
+    else if (this.FilterType == "Nome do Fornecedor") {
+      this.filteredFornecedores = this.SearchFilter ? this.FiltrarLivros(this.SearchFilter) : this.fornecedoresList;
+    }
+    else if (this.FilterType == "Livro") {
+      this.filteredEstoques = this.SearchFilter ? this.FiltrarLivros(this.SearchFilter) : this.estoquesList;
+    }
   }
   FiltrarLivros(value: string): any {
     value = value.toLocaleLowerCase();
@@ -260,9 +402,46 @@ export class LivroServiceService {
         return this.fornecedoresList.filter(
           (fornecedor: { nome: string }) => fornecedor?.nome.toLocaleLowerCase()
             .indexOf(value) !== -1
-        )
+        );
+        break;
+
+      case "Livro":
+        let estoqueComTitulo = Object.assign(this.estoquesList);
+        estoqueComTitulo.forEach((est: any) => {
+          est.titulo = this.livrosList.find(liv => liv.id == est.livroID)!.titulo;
+        });
+
+        let estoqueOrdenado = estoqueComTitulo.filter(
+          (estoque: { titulo: string }) => estoque.titulo.toLocaleLowerCase().indexOf(value) !== -1
+        );
+
+        //var result = estoqueOrdenado.map((est:any) => ({id: est.id, quantidade: est.quantidade, dataRegistro: est.dataRegistro, livroID: est.livroID}));
+        return estoqueOrdenado;
         break;
     }
   }
 
+  getSingleEstoque(): any {
+    let ids: number[] = [];
+    this.filteredEstoques.forEach(est => {
+      ids.push(est.livroID);
+    });
+
+    let ids2 = ids.filter((element, i) => i === ids.indexOf(element));
+    let idsFiltrados: number[] = [];
+
+    let estoque: Estoque[] = [];
+
+    ids2.forEach(id => {
+      if (!idsFiltrados.includes(id)) {
+        idsFiltrados.push(id);
+        estoque.push(this.filteredEstoques.find(est => est.livroID == id)!);
+      }
+    });
+    return estoque;
+  }
+
+  limitValue(e: Event, min: number, max: number) {
+    //console.log("changed");
+  }
 }

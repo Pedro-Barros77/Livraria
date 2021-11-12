@@ -31,8 +31,12 @@ export class FornecedorcreateComponent implements OnInit {
   onSubmit(form: NgForm) {
     this.thisForm = form;
 
-    if(form.form.controls["telefone"].value && form.form.controls["telefone"].value.toString().length == 0){
+    if(!form.form.controls["telefone"].value && form.form.controls["telefone"].value.toString().length == 0){
       this.service.formDataFornecedor.telefone = null;
+    }
+    else{
+      this.service.formDataFornecedor.telefone = form.form.controls["telefone"].value.toString()
+      .replace("(","").replace(")","").replace("-","").replace(" ","");
     }
 
     if(form.form.controls["email"].value.toString().length == 0){
@@ -167,20 +171,20 @@ export class FornecedorcreateComponent implements OnInit {
       this.lastLength = 0;
       return;
     }
-    
+
     let chars = ['(',')','-',' '];
     let newString = '';
-    
+
     Array.from(txtTel.value.toString()).forEach(letra => {
       if(!chars.includes(letra)){
         newString += letra;
       }
     });
-    
+
     if(newString.length == 2 && !txtTel.value.toString().includes('(')){
       txtTel.value = "(" + newString + ") ";
     }
-    
+
     if(newString.length == 6){
       txtTel.value += "-";
     }

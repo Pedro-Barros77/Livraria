@@ -11,7 +11,7 @@ namespace Livraria_API.Models
 
         public int Quantidade { get; set; }
 
-        public int MinQuantidade { get; set; }
+        public DateTime? DataRegistro { get; set; }
 
         [ForeignKey("Livro")]
         public int LivroID { get; set; }

@@ -22,5 +22,6 @@ export class AppComponent {
 
     isHomePage(): boolean{
     return this.router.url.toString().includes("client");
+
   }
 }

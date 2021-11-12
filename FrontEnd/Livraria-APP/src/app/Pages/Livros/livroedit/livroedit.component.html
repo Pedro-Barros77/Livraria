@@ -32,7 +32,7 @@
         <div class="form-group">
           <label class="control-label">Título</label>
           <!-- Caixa de texto TITULO-->
-          <input class="form-control" placeholder="Titulo" name="titulo" id="txtTitulo" value="titulo" #titulo="ngModel"
+          <input class="form-control" maxlength="50" placeholder="Titulo" name="titulo" id="txtTitulo" value="titulo" #titulo="ngModel"
             [(ngModel)]="service.formData.titulo" required [class.invalid]="titulo.invalid && titulo.touched" />
 
           <span class="text-danger invalid-feedback">Campo Título obrigatório.</span>
@@ -44,7 +44,7 @@
           <label class="control-label">Valor</label>
           <!-- Caixa de texto VALOR-->
           <input class="form-control txtCurrency" placeholder="Valor" name="valor" id="txtValor" value="valor"
-            #valor="ngModel" [(ngModel)]="service.formData.valor" required
+            #valor="ngModel" [(ngModel)]="service._formDataValor" required
             [class.invalid]="valor.invalid && valor.touched" [value]="getValor()" />
           <span class="text-danger invalid-feedback">Campo Valor obrigatório.</span>
         </div>
@@ -87,20 +87,20 @@
 
     <div class="row justify-content-center">
 
-      <div class="col-sm-8 col-md-8 col-lg-6">
+      <div class="col-sm-12 col-md-8 col-lg-6">
         <div class="form-group">
           <label for="formFile" class="form-label">Enviar Imagem</label>
           <input (change)="selectFile($event)" class="form-control custom-file-input" type="file" id="formFile">
         </div>
       </div>
 
-      <div class="col-sm-4 col-md-4 col-lg-2">
-        <div class="form-group">
-          <label for="btnDeleteImg" class="form-label" style="color: transparent;"> . </label>
-          <button id="btnDeleteImg" type="button" class="btn btn-outline-danger btnAction">
-            <i class="fas fa-trash-alt"></i> Imagem
-          </button>
+      <div class="col-sm-12 col-md-4 col-lg-2">
+
+        <div class="mb-3">
+          <label for="minQuantidade" class="form-label">Quantidade Min</label>
+          <input aria-label="minQuantidade" name="minQuantidade" #minQuantidade="ngModel" [(ngModel)]="service._formDataMinQuantidade" type="number" class="form-control" id="minQuantidade" placeholder="1" value="1">
         </div>
+
       </div>
     </div>
 
@@ -108,7 +108,7 @@
       <div class="col-12 col-md-8">
         <div class="form-group">
           <br />
-          <button id="callModal" style="display: none;" class="btn btn-primary" 
+          <button id="callModal" style="display: none;" class="btn btn-primary"
           data-bs-toggle="modal" data-bs-target="#duplicateModal" type="button"></button>
           <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Salvar</button>
         </div>

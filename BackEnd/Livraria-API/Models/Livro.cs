@@ -17,6 +17,10 @@ namespace Livraria_API.Models
 
         public string ImageExt { get; set; }
 
+        public int? MinQuantidade { get; set; }
+
+        public int QuantidadeTotal { get; set; } = 0;
+
         [ForeignKey("Autor")]
         public int? AutorID { get; set; }
         public virtual Autor? Autor { get; set; }
